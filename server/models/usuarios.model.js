@@ -1,9 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import connection from '../db.js';
-import e from "express";
 
 const errorDB = (mensaje , error) => {
-    const err = new Error(`${mensaje}: ${error.mensaje}`);
+    const err = new Error(`${mensaje}: ${error.message}`);
     err.code = error.code
     return err
 };
@@ -12,7 +11,7 @@ class Usuarios{
     static async todos() {
         try {
             const [rows] = await connection.query(
-                'SELECT * FROM usuarios ORDER BY apellidos ASC, nombre ASC'
+                'SELECT * FROM usuarios ORDER BY apellido ASC, nombre ASC'
             );
             return rows;
         }
@@ -84,7 +83,7 @@ class Usuarios{
     static async buscarCedula(cedula){
         try{
             const [rows] = await connection.query(
-                'SELECT * FROM usuarios WHERE cedula = ?'
+                'SELECT * FROM usuarios WHERE cedula = ?' ,
                 [cedula]
             )
             return rows.length === 0 ? null : rows[0]
@@ -106,9 +105,6 @@ class Usuarios{
             throw errorDB('Error al buscar usuario por ID', error);
         }
     }
-
-
 };
 
-// primera etapa simple CRUD pensado agregar peticiones  de busqueda
 export default Usuarios;   
