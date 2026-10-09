@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import usuariosRouter from './routes/usuarios.route.js'
+import productosRouter from './routes/productos.route.js'
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/usuario' , usuariosRouter)
+app.use('/api/producto', productosRouter)
 
 app.use((req,res)=>{
     res.status(404).json({
