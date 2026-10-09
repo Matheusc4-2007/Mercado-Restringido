@@ -1,10 +1,16 @@
 import {Router} from 'express'
 import control from '../controllers/usuarios.controller.js'
+import ErrorApi from '../utils/ErrorApi.js'
 
 const router = Router()
 
 const responderError = (res ,e) => {
-    res.status(500).json({error : e.message , code: e.code ?? null})
+    if(e instanceof ErrorApi) {
+        return res.status(e.status).json({error: e.error , detalle: e.detalle})
+    }
+    console.error(e)
+    res.status(500).json({error: 'Error interno del servidor' , detalle: e.message
+     })
 }
 
 router.get('/' , async (req , res) =>{ 
@@ -18,8 +24,7 @@ router.get('/' , async (req , res) =>{
 
 router.get('/cedula/:cedula' , async (req , res) => {
     try{
-        const usuario = await control.buscarCedula(req.params.cedula)
-        res.status(usuario ? 200 : 404).json(usuario ?? {error: 'No encontrado'})
+        res.json(await control.buscarCedula(req.params.cedula))
     }
     catch(e){
         responderError(res, e)
@@ -28,8 +33,7 @@ router.get('/cedula/:cedula' , async (req , res) => {
 
 router.get('/:id' , async (req , res) => {
     try{
-        const usuario = await control.buscarId(req.params.id)
-        res.status(usuario ? 200 : 404).json(usuario ?? {error: 'No encontrado'})
+        res.json(await control.buscarId(req.params.id))
     }
     catch(e){
         responderError(res, e)
@@ -47,8 +51,7 @@ router.post('/' , async(req ,res) => {
 
 router.delete('/:id' , async (req , res) => {
     try{
-        const usuario = await control.eliminar(req.params.id)
-        res.status(usuario ? 200 : 404).json(usuario ?? {error: 'No encontrado'})
+        res.json(await control.eliminar(req.params.id))
     }
     catch(e){
         responderError(res, e)
@@ -57,8 +60,7 @@ router.delete('/:id' , async (req , res) => {
 
 router.put('/:id' , async (req , res) => {
     try{
-        const usuario = await control.actualizar(req.params.id , req.body)
-        res.status(usuario ? 200 : 404).json(usuario ?? {error: 'No encontrado o sin cambios'})
+        res.json(await control.actualizar(req.params.id, req.body))
     }
     catch(e){
         responderError(res, e)
