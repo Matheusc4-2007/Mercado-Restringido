@@ -80,6 +80,34 @@ class Usuarios{
             throw errorDB('Error al eliminar usuario', error)
         }
     }
+
+    static async buscarCedula(cedula){
+        try{
+            const [rows] = await connection.query(
+                'SELECT * FROM usuarios WHERE cedula = ?'
+                [cedula]
+            )
+            return rows.length === 0 ? null : rows[0]
+        }
+        catch(error){
+            throw errorDB('Error al buscar usuario por cedula' , error);
+        }
+    }
+
+    static async buscarId(id) {
+        try {
+            const [rows] = await connection.query(
+                'SELECT * FROM usuarios WHERE id = ?',
+                [id]
+            );
+            return rows.length === 0 ? null : rows[0];
+        } 
+        catch (error) {
+            throw errorDB('Error al buscar usuario por ID', error);
+        }
+    }
+
+
 };
 
 // primera etapa simple CRUD pensado agregar peticiones  de busqueda
