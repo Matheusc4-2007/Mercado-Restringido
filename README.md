@@ -12,3 +12,10 @@ pienso hacer  una logica (routes - controllers - models) utilizando variables re
 
 Instalar pnpm con: [  npm install -g pnpm  ]  y menejar igual  que npm los comandos basicos  
 como [ pnpm install] o [ pnpm run dev ] puesto si no los archivos package.json al hacer push sera diferentes y duplicados 
+
+## Variables Env en server  
+    PORT=3000
+    DB_HOST=localhost
+    DB_USER=root
+    DB_PASSWORD=
+    DB_NAME=MercadoRestringido
