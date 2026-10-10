@@ -1,0 +1,11 @@
+.Admin { 
+    display: flex; min-height: 90vh; 
+}
+
+.Admin-sidebar {
+    width: 220px; display: flex; flex-direction: column; gap: 8px; padding: 16px; 
+}
+
+.Admin-content {
+    flex: 1; padding: 16px; 
+}

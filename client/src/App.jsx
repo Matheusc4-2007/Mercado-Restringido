@@ -5,6 +5,8 @@ import { Home } from './components/Home';
 import { FormLog } from './components/FormLog';
 import { ProductsCatalog } from './components/ProductsCatalog';
 import { ProductsDetails } from './components/ProductsDetails';
+import { AdminPanel } from './components/admin/AdminPanel';
+import { esAdmin } from './utils/admin';
 
 /*Fondos*/
 
@@ -51,7 +53,7 @@ function App() {
 
   const handleLogin = (u) => {
     setUsuario(u)
-    setPage('home')
+    setPage(esAdmin(u) ? 'admin' : 'home')
   }
 
   const handleLogout = () => {
@@ -62,9 +64,17 @@ function App() {
   const renderPage = () => {
     switch (page) {    // podemos agregar mas cosas si es necesario y no tenemos un mar de returns
       case 'home':
-        return <Home bg={bg} setBg={setBg} backgrounds={backgrounds} page={page} setPage={setPage} />
+        return (
+          <Home bg={bg} setBg={setBg} backgrounds={backgrounds} page={page} setPage={setPage} />
+        )
       case 'login':
-        return <FormLog onLogin={handleLogin} />
+        return (
+        <FormLog onLogin={handleLogin} />
+        ) 
+      case 'admin' :
+        return(
+          esAdmin(usuario) ? <AdminPanel /> : <p>Acceso restringido</p>
+        )
       default:
         return null // catalog y cart todavía vacíos
     }

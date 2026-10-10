@@ -1,4 +1,5 @@
 import Logo from '../assets/Logo_Shop.svg'
+import { esAdmin } from '../utils/admin';
 
 export function ButtonNav({text, page, setPage, direction}) {
   const isActive = page == direction;
@@ -25,6 +26,12 @@ export function NavBar ({page, setPage, usuario , onLogout}) {
       <span className='NavSeparator'></span>
       <ButtonNav text="Carrito" page={page} setPage={setPage} direction="cart"/>
       <span className='NavSeparator'></span>
+      {esAdmin(usuario) && (
+        <>
+          <ButtonNav text="Administrar" page={page} setPage={setPage} direction="admin"/>
+          <span className='NavSeparator'></span>
+        </>
+      )}
       {usuario ? (
         <>
           <span className="NavUser">Hola, {usuario.nombre}</span>
