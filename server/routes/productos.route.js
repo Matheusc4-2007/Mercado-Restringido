@@ -14,7 +14,12 @@ const responderError = (res, e) => {
 
 router.get('/', async (req, res) => {
     try {
-        res.json(await control.todos())
+        const { nombre } = req.query
+        res.json(
+            nombre !== undefined
+                ? await control.buscarNombre(nombre)
+                : await control.todos()
+        )
     } catch (e) {
         responderError(res, e)
     }
