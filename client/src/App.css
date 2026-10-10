@@ -211,3 +211,119 @@ body {
   background: var(--brand-primary);
   color: var(--border-default);
 }
+
+/*Login*/
+
+.Form-container {
+  width: 100%;
+  height: calc(100vh - 84px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary); 
+}
+
+.Form-login {
+  display: flex;
+  width: 100%;
+  max-width: 450px;
+  background: var(--bg-secondary);
+  border-radius: 20px;
+  padding: 40px;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.Form-title {
+  color: var(--text-primary);
+  margin: 20px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.Select-container {
+  background: var(--bg-primary);
+  padding: 5px;
+  width: 100%;
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.Select-button {
+  flex: 1; 
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.Select-button.active {
+  background: var(--border-default);
+  color: var(--brand-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.Form-input {
+  background: var(--border-default);
+  color: var(--text-primary);
+  padding: 0 20px;
+  width: 100%;
+  height: 50px;
+  margin: 10px 0;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.Form-input:focus {
+  border: 2px solid var(--brand-primary);
+}
+
+.Checkbox-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  margin: 5px 0 20px 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.Form-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand-primary);
+  cursor: pointer;
+}
+
+.Submit-button {
+  width: 100%;
+  height: 50px;
+  background: var(--brand-primary);
+  color: var(--border-default);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 10px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.Submit-button:hover {
+  background: #3f1178;
+}

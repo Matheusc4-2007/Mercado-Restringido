@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css'
 import { NavBar } from './components/NavBar';
 import { Home } from './components/Home';
+import { FormLog } from './components/FormLog';
 
 /*Fondos*/
 
@@ -17,6 +18,7 @@ function App() {
   let [page, setPage] = useState("home");
   let [bg, setBg] = useState(0);
 
+  // para cambiar los fondos
   const backgrounds = [{
       id: 0,
       url: bg1,
@@ -68,6 +70,7 @@ function App() {
       return (
         <>
         <NavBar page={page} setPage={setPage}/>
+        <FormLog/>
         </>
       )
   }
