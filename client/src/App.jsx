@@ -15,40 +15,44 @@ import bg3 from './assets/bg-landing-4.jpg'
 import bg4 from './assets/bg-landing-5.png'
 import bg5 from './assets/bg-landing-2.png'
 
+// para cambiar los fondos
+  const backgrounds = [{
+      id: 0,
+      url: bg1,
+      subtittle: "gran catálogo en ropas",
+      color: "#C9BCB5"
+    },
+    {
+      id: 1,
+      url: bg2,
+      subtittle: "tus marcas favoritas",
+      color: "#FED338"
+    },
+    {
+      id: 2,
+      url: bg3,
+      subtittle: "lo último en tecnología",
+      color: "#232323"
+    },
+    {
+      id: 3,
+      url: bg4,
+      subtittle: "articulos para tu hogar",
+      color: "#C4C5CD"
+    },
+    {
+      id: 4,
+      url: bg5,
+      subtittle: "todo en cosmeticos y cuidado personal",
+      color: "#F2EEEC"
+    },
+  ]
 
 
 function App() {
   let [page, setPage] = useState("home");
   let [bg, setBg] = useState(0);
   let [usuario, setUsuario] = useState(null);
-
-  // para cambiar los fondos
-  const backgrounds = [{
-      id: 0,
-      url: bg1,
-      subtittle: "gran catálogo en ropas"
-    },
-    {
-      id: 1,
-      url: bg2,
-      subtittle: "tus marcas favoritas"
-    },
-    {
-      id: 2,
-      url: bg3,
-      subtittle: "lo último en tecnología"
-    },
-    {
-      id: 3,
-      url: bg4,
-      subtittle: "articulos para tu hogar"
-    },
-    {
-      id: 4,
-      url: bg5,
-      subtittle: "todo en cosmeticos y cuidado personal"
-    },
-  ]
 
   const handleLogin = (u) => {
     setUsuario(u)
