@@ -14,7 +14,7 @@ export function NavBar ({page, setPage}) {
   return <nav className="NavBar">
     <div className="NavBar-brand">
       <img src={Logo} className="Logo"/>
-      <h1>Name Placeholder</h1>
+      <h1>Mercado Restringido</h1>
     </div>
     <div className="NavBar-links">
       <span className='NavSeparator'></span>

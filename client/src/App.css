@@ -105,11 +105,20 @@ body {
   gap: 30px;
 }
 
+@keyframes slideFade {
+  0% {
+    opacity: 0.5;
+    transform: translateX(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .Welcome {
   box-sizing: border-box;
-  background-image: url(./assets/bg-landing-4.jpg);
   background-position: top;
-  background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
@@ -117,6 +126,7 @@ body {
   width: 80%;
   height: 100%;
   align-items: center;
+  animation: slideFade 0.6s ease-in-out; 
 }
 
 .Home h2 {
@@ -179,6 +189,7 @@ body {
   transition: 0.5s;
   padding: 10px 30px;
   border-radius: 100%;
+  color: var(--border-default);
 }
 
 .Arrow:hover {
@@ -206,9 +217,21 @@ body {
 
 .Buttons-welcome button:hover {
   transition: 0.5s;
-  transform: scale(1.05);
+  transform: scale(1.07);
   cursor: pointer;
   background: var(--brand-primary);
+  color: var(--border-default);
+}
+
+.Creators {
+  margin-top: 120px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  letter-spacing: 2px;
+  font-weight: 400;
+}
+
+.Creators > a {
   color: var(--border-default);
 }
 
@@ -233,6 +256,7 @@ body {
   flex-direction: column;
   align-items: center;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  animation: slideFade 0.6s ease-in-out; 
 }
 
 .Form-title {
@@ -326,4 +350,82 @@ body {
 
 .Submit-button:hover {
   background: #3f1178;
+}
+
+/*Catalogo*/
+
+.Products-catalog {
+  width: 100%;
+  height: 90vh;
+  background: #00f;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Products-catalog >.SearchBar {
+  margin-top: 0;
+}
+
+.Products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.Product-card {
+  background: var(--border-default);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.Product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.Img-product {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+  background: #f8f9fa;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.Product-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.Product-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.Product-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin: 4px 0 0 0;
+}
+
+.Product-seller {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin: 0;
 }

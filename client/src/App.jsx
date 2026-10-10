@@ -3,6 +3,8 @@ import './App.css'
 import { NavBar } from './components/NavBar';
 import { Home } from './components/Home';
 import { FormLog } from './components/FormLog';
+import { ProductsCatalog } from './components/ProductsCatalog';
+import { ProductsDetails } from './components/ProductsDetails';
 
 /*Fondos*/
 
@@ -27,7 +29,7 @@ function App() {
     {
       id: 1,
       url: bg2,
-      subtittle: "todos tus productos favoritos"
+      subtittle: "tus marcas favoritas"
     },
     {
       id: 2,
@@ -58,6 +60,9 @@ function App() {
       return (
         <>
         <NavBar page={page} setPage={setPage}/>
+        <div className='Catalog-container'>
+          <ProductsCatalog/>
+        </div>
         </>
       )
     case 'cart':
