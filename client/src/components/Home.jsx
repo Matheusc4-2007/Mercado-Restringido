@@ -28,7 +28,7 @@ export function Home({bg, setBg, backgrounds, page, setPage}) {
     if (!isFocused) {
       intervalRef.current = setInterval(() => {
         setBg((prev) => (prev === backgrounds.length - 1 ? 0 : prev + 1));
-      }, 5000);
+      }, 8000);
     }
   };
 

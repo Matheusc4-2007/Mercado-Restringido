@@ -1,11 +1,312 @@
 .Admin { 
-    display: flex; min-height: 90vh; 
+  display: flex; 
+  min-height: 90vh; 
+  background: var(--bg-primary);
+  font-family: 'Poppins', sans-serif;
 }
 
 .Admin-sidebar {
-    width: 220px; display: flex; flex-direction: column; gap: 8px; padding: 16px; 
+  width: 250px; 
+  background: var(--bg-secondary);
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  padding: 24px 16px; 
+  border-right: 2px solid var(--border-default);
+  box-sizing: border-box;
+}
+
+.Admin-sidebar h2 {
+  font-size: 18px;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+  font-weight: 600;
+  padding-left: 10px;
+}
+
+.Admin-link {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.Admin-link:hover {
+  background: var(--border-default);
+  color: var(--text-primary);
+}
+
+.Admin-link.active {
+  background: var(--brand-primary);
+  color: var(--border-default);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .Admin-content {
-    flex: 1; padding: 16px; 
+  flex: 1; 
+  padding: 30px; 
+  box-sizing: border-box;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+h2 {
+  font-size: 26px;
+  color: var(--brand-primary);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.Admin-content form {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.Admin-content form input, 
+.Admin-content form select {
+  background: var(--border-default);
+  border: 2px solid transparent;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  flex: 1;
+  min-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.Admin-content form input {
+  margin-left: 10px;
+}
+
+.Admin-content form input:focus {
+  border-color: var(--brand-primary);
+}
+
+.Admin-content button[type="submit"],
+.Admin-content form button {
+  background: var(--brand-primary);
+  color: var(--border-default);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.Admin-content button[type="submit"]:hover,
+.Admin-content form button:hover {
+  background: #3f1178;
+}
+
+.Admin-content button[type="button"] {
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-secondary);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.Admin-content button[type="button"]:hover {
+  background: var(--text-secondary);
+  color: var(--border-default);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  margin-top: 15px;
+}
+
+th, td {
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  background: var(--brand-primary);
+  color: var(--border-default);
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+td {
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-default);
+}
+
+td button, .Table-actions button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 6px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+td button.btn-editar, td button:first-child {
+  background: #e0d4fc;
+  color: var(--brand-primary);
+}
+
+td button.btn-eliminar, td button:last-child {
+  background: #fde8e8;
+  color: #c53030;
+}
+
+/* ============================
+   ESTILOS PARA FORMULARIOS ADMIN
+============================ */
+.Admin-form {
+  background: var(--bg-secondary);
+  padding: 25px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.Admin-form-title {
+  font-size: 18px;
+  color: var(--text-primary);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Cuadrícula de inputs en el formulario */
+.Admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.Admin-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.Admin-input {
+  background: var(--border-default);
+  border: 2px solid transparent;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.Admin-input:focus {
+  border-color: var(--brand-primary);
+}
+
+.Admin-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Checkbox estilizado */
+.Admin-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.Admin-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand-primary);
+  cursor: pointer;
+}
+
+.Admin-checkbox-label {
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* Botones de acción del formulario */
+.Admin-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.Admin-btn-primary {
+  background: var(--brand-primary);
+  color: var(--border-default);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.Admin-btn-primary:hover:not(:disabled) {
+  background: #3f1178;
+}
+
+.Admin-btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.Admin-btn-secondary {
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-secondary);
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.Admin-btn-secondary:hover {
+  background: var(--text-secondary);
+  color: var(--border-default);
 }
