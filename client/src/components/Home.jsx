@@ -1,12 +1,26 @@
-export function SearchBar ({ onFocus, onBlur }) {
+import { useEffect, useRef, useState } from 'react';
+
+export function SearchBar ({ valorInicial = '', onBuscar ,onFocus, onBlur }) {
+
+  const [texto, setTexto] = useState(valorInicial)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onBuscar?.(texto.trim())
+  }
+  
   return (
-    <form className="SearchBar" onSubmit={(e) => e.preventDefault()}>
+    <form className="SearchBar" onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Buscar productos, marcas y más..."
         className="SearchBar-input"
         onFocus={onFocus}
-        onBlur={onBlur} 
+        onBlur={onBlur}
+        value={texto}
+        minLength={2}
+        maxLength={200} 
+        onChange={(e) => setTexto(e.target.value)}
       />
       <button type="submit" className="SearchBar-button">
         Buscar
@@ -15,9 +29,8 @@ export function SearchBar ({ onFocus, onBlur }) {
   )
 }
 
-import { useEffect, useRef, useState } from 'react';
 
-export function Home({bg, setBg, backgrounds, page, setPage}) {
+export function Home({bg, setBg, backgrounds, page, setPage , onBuscar}) {
   const intervalRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -71,7 +84,8 @@ export function Home({bg, setBg, backgrounds, page, setPage}) {
         
         <SearchBar 
           onFocus={() => setIsFocused(true)} 
-          onBlur={() => setIsFocused(false)} 
+          onBlur={() => setIsFocused(false)}
+          onBuscar={onBuscar} 
         />
 
         <div className="Buttons-welcome">

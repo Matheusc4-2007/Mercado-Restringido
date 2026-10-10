@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import './App.css'
 import { NavBar } from './components/NavBar';
-import { Home, SearchBar } from './components/Home';
+import { Home} from './components/Home';
 import { FormLog } from './components/FormLog';
 import { AdminPanel } from './components/admin/AdminPanel';
 import { esAdmin } from './utils/admin';
-import { Product } from './components/Product';
+import { Catalog } from './components/Catalog';
 
 /*Fondos*/
 
@@ -64,11 +64,23 @@ function App() {
     setPage('home')
   }
 
+  let [busqueda, setBusqueda] = useState('');
+
+  const irA = (destino) => {
+    if (destino === 'catalog') setBusqueda('')
+    setPage(destino)
+  }
+
+  const buscar = (texto) => {
+    setBusqueda(texto)
+    setPage('catalog')
+  }
+
   const renderPage = () => { // sergio complicador
     switch (page) {    // podemos agregar mas cosas si es necesario y no tenemos un mar de returns
       case 'home':
         return (
-          <Home bg={bg} setBg={setBg} backgrounds={backgrounds} page={page} setPage={setPage} />
+          <Home bg={bg} setBg={setBg} backgrounds={backgrounds} page={page} setPage={setPage} onBuscar={buscar} />
         )
       case 'login':
         return (
@@ -80,43 +92,7 @@ function App() {
         )
       case 'catalog' :
         return(
-          <section className='Catalog-section'>
-          <SearchBar/>
-          <div className='Products-container'>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-          </div>
-          </section>
+          <Catalog key={busqueda} busqueda={busqueda} onBuscar={buscar} />
         )
       default:
         return null // catalog y cart todavía vacíos
@@ -125,7 +101,7 @@ function App() {
 
   return(
     <>
-      <NavBar page={page} setPage={setPage} usuario={usuario} onLogout={handleLogout} />
+      <NavBar page={page} setPage={irA} usuario={usuario} onLogout={handleLogout} />
       {renderPage()}
     </>
   )
