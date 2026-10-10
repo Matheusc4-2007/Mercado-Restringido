@@ -150,6 +150,14 @@ class ProductosController {
 
         return aRespuesta(await Productos.eliminar(id))
     }
+
+    static async buscarNombre(texto) {
+        const v = validadores.nombre(texto)
+        if (v.error) throw new ErrorApi(400, 'Búsqueda inválida', v.error)
+
+        const productos = await Productos.buscarNombre(v.valor)
+        return productos.map(aRespuesta)
+    }
 }
 
 export default ProductosController

@@ -60,4 +60,17 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+router.get('/', async (req, res) => {
+    try {
+        const { nombre } = req.query
+        res.json(
+            nombre !== undefined
+                ? await control.buscarNombre(nombre)
+                : await control.todos()
+        )
+    } catch (e) {
+        responderError(res, e)
+    }
+})
+
 export default router

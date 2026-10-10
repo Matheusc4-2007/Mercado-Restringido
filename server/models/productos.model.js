@@ -103,6 +103,20 @@ class Productos {
             throw errorDB('Error al eliminar producto', error)
         }
     }
+
+    static async buscarNombre(texto) {
+        try {
+            // Escapa \ % _ para que se busquen como texto literal
+            const patron = `%${texto.replace(/[\\%_]/g, '\\$&')}%`
+            const [rows] = await connection.query(
+                `${SELECT_PRODUCTO} WHERE p.nombre LIKE ? ORDER BY p.nombre ASC`,
+                [patron]
+            )
+            return rows
+        } catch (error) {
+            throw errorDB('Error al buscar productos por nombre', error)
+        }
+    }
 }
 
 export default Productos
