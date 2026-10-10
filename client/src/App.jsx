@@ -60,9 +60,13 @@ function App() {
   const renderPage = () => {
     switch (page) {    // podemos agregar mas cosas si es necesario y no tenemos un mar de returns
       case 'home':
-        return <Home bg={bg} setBg={setBg} backgrounds={backgrounds} page={page} setPage={setPage} />
+        return (
+          <Home bg={bg} setBg={setBg} backgrounds={backgrounds} page={page} setPage={setPage} />
+        )
       case 'login':
-        return <FormLog onLogin={handleLogin} />
+        return (
+        <FormLog onLogin={handleLogin} />
+      )
       default:
         return null // catalog y cart todavía vacíos
     }
