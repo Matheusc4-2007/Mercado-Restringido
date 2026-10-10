@@ -10,8 +10,9 @@ export function ButtonNav({text, page, setPage, direction}) {
   </button>
 }
 
-export function NavBar ({page, setPage}) {
-  return <nav className="NavBar">
+export function NavBar ({page, setPage, usuario , onLogout}) {
+  return (
+  <nav className="NavBar">
     <div className="NavBar-brand">
       <img src={Logo} className="Logo"/>
       <h1>Name Placeholder</h1>
@@ -24,7 +25,16 @@ export function NavBar ({page, setPage}) {
       <span className='NavSeparator'></span>
       <ButtonNav text="Carrito" page={page} setPage={setPage} direction="cart"/>
       <span className='NavSeparator'></span>
-      <ButtonNav text="Iniciar Sesion" page={page} setPage={setPage} direction="login"/>
+      {usuario ? (
+        <>
+          <span className="NavUser">Hola, {usuario.nombre}</span>
+          <span className='NavSeparator'></span>
+          <button className="ButtonNav" onClick={onLogout}>Cerrar Sesion</button>
+        </>
+      ) : (
+        <ButtonNav text="Iniciar Sesion" page={page} setPage={setPage} direction="login"/>
+      )}
     </div>
   </nav>
+  )
 }

@@ -327,3 +327,21 @@ body {
 .Submit-button:hover {
   background: #3f1178;
 }
+
+estilos de prueba
+
+.Form-error {
+  background: #fdecea;
+  color: #b3261e;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+}
+.Form-error ul { margin: 0.3rem 0 0 1.1rem; list-style: disc; }
+.Submit-button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.NavUser {
+  color: var(--brand-primary);
+  font-weight: 600;
+  padding: 0 0.8rem;
+}
