@@ -1,3 +1,18 @@
+export function SearchBar () {
+  return (
+    <form className="SearchBar" onSubmit={(e) => e.preventDefault()}>
+          <input
+            type="text"
+            placeholder="Buscar productos, marcas y más..."
+            className="SearchBar-input"
+          />
+          <button type="submit" className="SearchBar-button">
+            Buscar
+          </button>
+        </form>
+  )
+}
+
 export function Home({bg, setBg, backgrounds, page, setPage}) {
   
   const handleNext = () => {
@@ -19,16 +34,7 @@ export function Home({bg, setBg, backgrounds, page, setPage}) {
             return backgrounds[bg].subtittle
           }
         })}</h3>
-        <form className="SearchBar" onSubmit={(e) => e.preventDefault()}>
-          <input
-            type="text"
-            placeholder="Buscar productos, marcas y más..."
-            className="SearchBar-input"
-          />
-          <button type="submit" className="SearchBar-button">
-            Buscar
-          </button>
-        </form>
+        <SearchBar/>
         <div className="Buttons-welcome">
           <button onClick={() => setPage("catalog")}>Ver Catalogo</button>
           <button onClick={() => setPage("login")}>Iniciar Sesion</button>

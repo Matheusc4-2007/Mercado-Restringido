@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import './App.css'
 import { NavBar } from './components/NavBar';
-import { Home } from './components/Home';
+import { Home, SearchBar } from './components/Home';
 import { FormLog } from './components/FormLog';
-import { ProductsCatalog } from './components/ProductsCatalog';
-import { ProductsDetails } from './components/ProductsDetails';
 import { AdminPanel } from './components/admin/AdminPanel';
 import { esAdmin } from './utils/admin';
+import { Product } from './components/Product';
 
 /*Fondos*/
 
@@ -61,7 +60,7 @@ function App() {
     setPage('home')
   }
 
-  const renderPage = () => {
+  const renderPage = () => { // sergio complicador
     switch (page) {    // podemos agregar mas cosas si es necesario y no tenemos un mar de returns
       case 'home':
         return (
@@ -74,6 +73,46 @@ function App() {
       case 'admin' :
         return(
           esAdmin(usuario) ? <AdminPanel /> : <p>Acceso restringido</p>
+        )
+      case 'catalog' :
+        return(
+          <section className='Catalog-section'>
+          <SearchBar/>
+          <div className='Products-container'>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+            <Product/>
+          </div>
+          </section>
         )
       default:
         return null // catalog y cart todavía vacíos
