@@ -19,6 +19,7 @@ import bg5 from './assets/bg-landing-2.png'
 function App() {
   let [page, setPage] = useState("home");
   let [bg, setBg] = useState(0);
+  let [usuario, setUsuario] = useState(null);
 
   // para cambiar los fondos
   const backgrounds = [{
@@ -48,37 +49,33 @@ function App() {
     },
   ]
 
-  switch (page) {
-    case 'home':
-      return (
-        <>
-        <NavBar page={page} setPage={setPage}/>
-        <Home bg={bg} setBg={setBg} backgrounds={backgrounds} page={page} setPage={setPage}/>
-        </>
-      )
-    case 'catalog':
-      return (
-        <>
-        <NavBar page={page} setPage={setPage}/>
-        <div className='Catalog-container'>
-          <ProductsCatalog/>
-        </div>
-        </>
-      )
-    case 'cart':
-      return (
-        <>
-        <NavBar page={page} setPage={setPage}/>
-        </>
-      )
-    case 'login':
-      return (
-        <>
-        <NavBar page={page} setPage={setPage}/>
-        <FormLog/>
-        </>
-      )
+  const handleLogin = (u) => {
+    setUsuario(u)
+    setPage('home')
   }
+
+  const handleLogout = () => {
+    setUsuario(null)
+    setPage('home')
+  }
+
+  const renderPage = () => {
+    switch (page) {    // podemos agregar mas cosas si es necesario y no tenemos un mar de returns
+      case 'home':
+        return <Home bg={bg} setBg={setBg} backgrounds={backgrounds} page={page} setPage={setPage} />
+      case 'login':
+        return <FormLog onLogin={handleLogin} />
+      default:
+        return null // catalog y cart todavía vacíos
+    }
+  }
+
+  return(
+    <>
+      <NavBar page={page} setPage={setPage} usuario={usuario} onLogout={handleLogout} />
+      {renderPage()}
+    </>
+  )
 }
 
 export default App

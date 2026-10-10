@@ -1,10 +1,15 @@
 import { Router } from 'express'
 import control from '../controllers/productos.controller.js'
+import ErrorApi from '../utils/ErrorApi.js'
 
 const router = Router()
 
 const responderError = (res, e) => {
-    res.status(500).json({ error: e.message, code: e.code ?? null })
+    if(e instanceof ErrorApi){
+        return res.status(e.status).json({error: e.error , detalle: e.detalle})
+    }
+    console.error(e)
+    res.status(500).json({ error: 'Error interno del server' , detalle: e.message  })
 }
 
 router.get('/', async (req, res) => {
@@ -15,7 +20,6 @@ router.get('/', async (req, res) => {
     }
 })
 
-// va ANTES de '/:id', si no Express toma "vendedor" como un id
 router.get('/vendedor/:idVendedor', async (req, res) => {
     try {
         res.json(await control.buscarVendedor(req.params.idVendedor))
@@ -26,8 +30,7 @@ router.get('/vendedor/:idVendedor', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const producto = await control.buscarId(req.params.id)
-        res.status(producto ? 200 : 404).json(producto ?? { error: 'No encontrado' })
+        res.json(await control.buscarId(req.params.id))
     } catch (e) {
         responderError(res, e)
     }
@@ -43,8 +46,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        const producto = await control.actualizar(req.params.id, req.body)
-        res.status(producto ? 200 : 404).json(producto ?? { error: 'No encontrado o sin cambios' })
+        res.json(await control.actualizar(req.params.id, req.body))
     } catch (e) {
         responderError(res, e)
     }
@@ -52,8 +54,20 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const producto = await control.eliminar(req.params.id)
-        res.status(producto ? 200 : 404).json(producto ?? { error: 'No encontrado' })
+        res.json(await control.eliminar(req.params.id))
+    } catch (e) {
+        responderError(res, e)
+    }
+})
+
+router.get('/', async (req, res) => {
+    try {
+        const { nombre } = req.query
+        res.json(
+            nombre !== undefined
+                ? await control.buscarNombre(nombre)
+                : await control.todos()
+        )
     } catch (e) {
         responderError(res, e)
     }
