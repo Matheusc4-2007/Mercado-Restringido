@@ -3,6 +3,8 @@ import './App.css'
 import { NavBar } from './components/NavBar';
 import { Home } from './components/Home';
 import { FormLog } from './components/FormLog';
+import { AdminPanel } from './components/admin/AdminPanel';
+import { esAdmin } from './utils/admin';
 
 /*Fondos*/
 
@@ -49,7 +51,7 @@ function App() {
 
   const handleLogin = (u) => {
     setUsuario(u)
-    setPage('home')
+    setPage(esAdmin(u) ? 'admin' : 'home')
   }
 
   const handleLogout = () => {
@@ -66,7 +68,11 @@ function App() {
       case 'login':
         return (
         <FormLog onLogin={handleLogin} />
-      )
+       ) 
+      case 'admin' :
+        return(
+          esAdmin(usuario) ? <AdminPanel /> : <p>Acceso restringido</p>
+        )
       default:
         return null // catalog y cart todavía vacíos
     }
