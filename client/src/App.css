@@ -35,15 +35,16 @@ body {
 .NavBar-brand {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.6rem;
     cursor: pointer;
 }
 
-.NavBar-brand h1 {
+.titulo-pagina  {
     color: var(--text-primary);
     margin: 0;
-    font-size: 28px;
-    font-weight: 500;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.05rem;
 }
 
 .Logo {
@@ -170,10 +171,8 @@ body {
     background-color: var(--brand-primary);
     color: var(--border-default);
     border: none;
-    padding: 0 2rem;
-    font-size: 16px;
+    padding: 0 1.5rem;
     font-weight: 600;
-    font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -450,8 +449,13 @@ body {
 }
 
 .Product-card > .Name {
-  font-size: 16px;
-  color: var(--text-primary);
+  text-align: center;
+    height: 50px;
+    overflow-y: scroll;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 10px;
+    color: var(--text-primary);
 }
 
 .Product-card > .Price {

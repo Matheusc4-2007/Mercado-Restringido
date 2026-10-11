@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Search } from 'lucide-react';
 
 export function SearchBar({ valorInicial = '', onBuscar, onFocus, onBlur }) {
     const [texto, setTexto] = useState(valorInicial);
@@ -12,7 +13,7 @@ export function SearchBar({ valorInicial = '', onBuscar, onFocus, onBlur }) {
         <form className="SearchBar" onSubmit={handleSubmit}>
             <input
                 type="text"
-                placeholder="Buscar productos, marcas y más..."
+                placeholder="buscar productos, marcas y más..."
                 className="SearchBar-input"
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -22,7 +23,7 @@ export function SearchBar({ valorInicial = '', onBuscar, onFocus, onBlur }) {
                 onChange={(e) => setTexto(e.target.value)}
             />
             <button type="submit" className="SearchBar-button">
-                Buscar
+                <Search strokeWidth={3} />
             </button>
         </form>
     );

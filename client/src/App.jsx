@@ -6,6 +6,7 @@ import { FormLog } from './components/FormLog';
 import { AdminPanel } from './components/admin/AdminPanel';
 import { esAdmin } from './utils/admin';
 import { Catalog } from './components/Catalog';
+import Carrito from './components/Carrito';
 
 /*Fondos*/
 
@@ -107,6 +108,8 @@ function App() {
                         onBuscar={buscar}
                     />
                 );
+            case 'carrito':
+                return <Carrito />;
             default:
                 return null; // catalog y cart todavía vacíos
         }

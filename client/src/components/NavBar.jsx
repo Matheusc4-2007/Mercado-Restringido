@@ -1,5 +1,6 @@
-import Logo from '../assets/Logo_Shop.svg';
+import Logo from '../assets/logo.svg';
 import { esAdmin } from '../utils/admin';
+import { ShoppingCart, LogOut } from 'lucide-react';
 
 export function ButtonNav({ text, page, setPage, direction }) {
     const isActive = page == direction;
@@ -19,29 +20,22 @@ export function NavBar({ page, setPage, usuario, onLogout }) {
         <nav className="NavBar">
             <a className="NavBar-brand" onClick={() => setPage('home')}>
                 <img src={Logo} className="Logo" />
-                <h1>Mercado Restringido</h1>
+                <h1 className='titulo-pagina'>Mercado Restringido</h1>
             </a>
             <div className="NavBar-links">
                 <span className="NavSeparator"></span>
                 <ButtonNav
-                    text="Home"
+                    text="Inicio"
                     page={page}
                     setPage={setPage}
                     direction="home"
                 />
                 <span className="NavSeparator"></span>
                 <ButtonNav
-                    text="Catalogo"
+                    text="Catálogo"
                     page={page}
                     setPage={setPage}
                     direction="catalog"
-                />
-                <span className="NavSeparator"></span>
-                <ButtonNav
-                    text="Carrito"
-                    page={page}
-                    setPage={setPage}
-                    direction="cart"
                 />
                 <span className="NavSeparator"></span>
                 {esAdmin(usuario) && (
@@ -63,9 +57,15 @@ export function NavBar({ page, setPage, usuario, onLogout }) {
                         setPage={setPage}
                         direction="account"
                         />
+                        <ButtonNav
+                            text={<ShoppingCart />}
+                            page={page}
+                            setPage={setPage}
+                            direction="cart"
+                        />
                         <span className="NavSeparator"></span>
                         <button className="ButtonNav" onClick={onLogout}>
-                            Cerrar Sesion
+                            <LogOut />
                         </button>
                     </>
                 ) : (

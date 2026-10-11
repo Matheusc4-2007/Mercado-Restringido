@@ -6,49 +6,90 @@ import { MensajeError } from './admin/MensajeError';
 import loading from '../assets/loading-icon.svg';
 
 export function Catalog({ busqueda, onBuscar }) {
-  const [productos, setProductos] = useState([])
-  const [error, setError] = useState(null)
-  const [cargando, setCargando] = useState(true)
+    const [productos, setProductos] = useState([]);
+    const [error, setError] = useState(null);
+    const [cargando, setCargando] = useState(true);
 
-  useEffect(() => {
-    let activo = true
-    listarProductos(busqueda)
-      .then((data) => activo && setProductos(data))
-      .catch((err) => activo && setError(err))
-      .finally(() => setTimeout( () => (activo && setCargando(false)), 200))
-    return () => {
-      activo = false
+    const [carritoData, setCarritoData] = useState(() => {
+        return JSON.parse(localStorage.getItem('carrito')) || [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('carrito', JSON.stringify(carritoData));
+    }, [carritoData]);
+
+    function agregarCarrito(id, nombre, precio, vendedor, imagen) {
+        setCarritoData((prev) => {
+            const existe = prev.find((item) => item.idCompra === id);
+
+            if (existe) {
+                return prev.map((item) =>
+                    item.idCompra === id
+                        ? { ...item, cantidad: item.cantidad + 1 }
+                        : item,
+                );
+            }
+
+            return [
+                ...prev,
+                {
+                    idCompra: id,
+                    nombreCompra: nombre,
+                    precioCompra: precio,
+                    vendedorCompra: vendedor,
+                    imagenCompra: imagen,
+                    cantidad: 1,
+                },
+            ];
+        });
     }
-  }, [busqueda])
 
-  return (
-    <section className="Catalog-section">
-      <SearchBar valorInicial={busqueda} onBuscar={onBuscar} />
+    useEffect(() => {
+        let activo = true;
+        listarProductos(busqueda)
+            .then((data) => activo && setProductos(data))
+            .catch((err) => activo && setError(err))
+            .finally(() => setTimeout(() => activo && setCargando(false), 200));
+        return () => {
+            activo = false;
+        };
+    }, [busqueda]);
 
-      {busqueda && <p className='Result-text'>Resultados para "{busqueda}"</p>}
+    return (
+        <section className="Catalog-section">
+            <SearchBar valorInicial={busqueda} onBuscar={onBuscar} />
 
-      <MensajeError error={error} />
+            {busqueda && (
+                <p className="Result-text">Resultados para "{busqueda}"</p>
+            )}
 
-        {cargando ? (
-            <>
-            <img src={loading} alt="Cargando" className='Loading-icon'/>
-            <p className='Result-text'>Cargando productos...</p>
-            </>
-                ) : productos.length === 0 && !error ? (
-            <p>No se encontraron productos</p>
-                ) : (
-            <div className="Products-container">
-                {productos.map((p) => (
-                    <Product
-                        key={p.id}
-                        name={p.nombre}
-                        price={p.precio.toFixed(2)}
-                        seller={p.vendedor}
-                        img={p.imagen}
+            <MensajeError error={error} />
+
+            {cargando ? (
+                <>
+                    <img
+                        src={loading}
+                        alt="Cargando"
+                        className="Loading-icon"
                     />
-                ))}
-            </div>
-        )}
-    </section>
-  )
+                    <p className="Result-text">Cargando productos...</p>
+                </>
+            ) : productos.length === 0 && !error ? (
+                <p>No se encontraron productos</p>
+            ) : (
+                <div className="Products-container">
+                    {productos.map((p) => (
+                        <Product
+                            key={p.id}
+                            name={p.nombre}
+                            price={p.precio.toFixed(2)}
+                            seller={p.vendedor}
+                            img={p.imagen}
+                            agregarCarrito={agregarCarrito}
+                        />
+                    ))}
+                </div>
+            )}
+        </section>
+    );
 }
