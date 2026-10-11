@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { NavBar } from './components/NavBar';
 import { Home } from './components/Home';
@@ -6,7 +6,7 @@ import { FormLog } from './components/FormLog';
 import { AdminPanel } from './components/admin/AdminPanel';
 import { esAdmin } from './utils/admin';
 import { Catalog } from './components/Catalog';
-import Carrito from './components/Carrito';
+import { Carrito } from './components/Carrito';
 
 /*Fondos*/
 
@@ -55,12 +55,17 @@ function App() {
     let [bg, setBg] = useState(0);
     let [usuario, setUsuario] = useState(null);
 
+    useEffect(() => {
+        localStorage.clear('carrito');
+    }, []);
+
     const handleLogin = (u) => {
         setUsuario(u);
         setPage(esAdmin(u) ? 'admin' : 'home');
     };
 
     const handleLogout = () => {
+        localStorage.clear('carrito');
         setUsuario(null);
         setPage('home');
     };
@@ -106,6 +111,7 @@ function App() {
                         key={busqueda}
                         busqueda={busqueda}
                         onBuscar={buscar}
+                        usuarioExiste={usuario}
                     />
                 );
             case 'carrito':
