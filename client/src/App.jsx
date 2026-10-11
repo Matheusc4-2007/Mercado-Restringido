@@ -12,11 +12,11 @@ import { Carrito } from './components/Carrito';
 
 /*Fondos*/
 
-import bg1 from './assets/bg-landing-7.jpg';
-import bg2 from './assets/bg-landing-3.png';
-import bg3 from './assets/bg-landing-4.jpg';
-import bg4 from './assets/bg-landing-5.png';
-import bg5 from './assets/bg-landing-2.png';
+import bg1 from './assets/bg-landing-7.webp';
+import bg2 from './assets/bg-landing-3.webp';
+import bg3 from './assets/bg-landing-4.webp';
+import bg4 from './assets/bg-landing-5.webp';
+import bg5 from './assets/bg-landing-2.webp';
 
 // para cambiar los fondos
 const backgrounds = [

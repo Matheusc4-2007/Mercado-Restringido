@@ -1,8 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-import { Search, Rat, Info } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { Info, Rat } from 'lucide-react';
 
-export function SearchBar({ valorInicial = '', onBuscar, onFocus, onBlur }) {
+export function SearchBar({
+    valorInicial = '',
+    onBuscar,
+    onFocus,
+    onBlur,
+    delay = 800,
+}) {
     const [texto, setTexto] = useState(valorInicial);
+
+    useEffect(() => {
+        setTexto('valorInicial');
+    }, [valorInicial]);
+
+    useEffect(() => {
+        if (texto === valorInicial) return;
+        if (texto.trim().length > 0 && texto.trim().length < 2) return;
+
+        const timer = setTimeout(() => {
+            onBuscar?.(texto.trim());
+        }, delay);
+
+        return () => clearTimeout(timer);
+    }, [texto, delay, onBuscar, valorInicial]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -13,7 +34,7 @@ export function SearchBar({ valorInicial = '', onBuscar, onFocus, onBlur }) {
         <form className="SearchBar" onSubmit={handleSubmit}>
             <input
                 type="text"
-                placeholder="buscar productos, marcas y más..."
+                placeholder={"buscar productos, marcas y más..." }
                 className="SearchBar-input"
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -22,9 +43,6 @@ export function SearchBar({ valorInicial = '', onBuscar, onFocus, onBlur }) {
                 maxLength={200}
                 onChange={(e) => setTexto(e.target.value)}
             />
-            <button type="submit" className="SearchBar-button">
-                <Search strokeWidth={3} />
-            </button>
         </form>
     );
 }

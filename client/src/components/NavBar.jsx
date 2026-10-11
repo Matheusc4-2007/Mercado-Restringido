@@ -1,4 +1,4 @@
-import Logo from '../assets/logo.svg';
+import Logo from '../assets/logo.webp';
 import { esAdmin } from '../utils/admin';
 import { ShoppingCart, LogOut, User, UserStar } from 'lucide-react';
 
@@ -61,17 +61,23 @@ export function NavBar({ page, setPage, usuario, onLogout }) {
                 )}
                 {usuario ? (
                     <>
-                        <ButtonNav
-                            text={
-                                <span className='usuario-view'>
-                                    <User /> {usuario.nombre}
-                                </span>
-                            }
-                            page={page}
-                            setPage={setPage}
-                            direction="account"
-                        />
-                        <span className="NavSeparator"></span>
+                        {usuario.es_vendedor ? (
+                            <ButtonNav
+                                text={
+                                    <span className="usuario-view">
+                                        <User /> {usuario.nombre}
+                                    </span>
+                                }
+                                page={page}
+                                setPage={setPage}
+                                direction="account"
+                            />
+                        ) : (
+                            <span className="usuario-view">
+                                <User /> {usuario.nombre}
+                            </span>
+                        )}
+
                         <ButtonNav
                             text={<ShoppingCart />}
                             page={page}

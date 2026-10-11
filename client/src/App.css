@@ -20,13 +20,13 @@ body {
     background: var(--bg-primary);
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    overflow-x:hidden;
+    overflow-x: hidden;
     background-color: var(--bg-primary);
-    background-image: url(./assets/fondo.svg);
+    background-image: url(./assets/fondo.webp);
     background-clip: border-box;
     background-size: contain;
     background-position-y: center;
-    background-blend-mode:darken;
+    background-blend-mode: darken;
 }
 
 /*Home*/
@@ -409,7 +409,7 @@ body {
 .Products-container {
     width: 95%;
     max-width: 1450px;
-    height: calc(90vh - 80px);
+    height: calc(90vh - 90px);
     overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -462,7 +462,7 @@ body {
 }
 
 .Product-card > .Name {
-  text-align: center;
+    text-align: center;
     height: 50px;
     overflow-y: scroll;
     font-size: 16px;
@@ -471,8 +471,8 @@ body {
 }
 
 .Product-card > .Price {
-  font-size: 20px;
-  color: #04aa0d;
+    font-size: 20px;
+    color: #04aa0d;
 }
 
 .Product-card > .Seller {
@@ -481,13 +481,13 @@ body {
 }
 
 .Agg-cart {
-  background: var(--brand-primary);
-  color: var(--border-default);
-  margin-top: 20px;
-  padding: 12px 20px;
-  border-radius: 30px;
-  font-size: 14px;
-  transition: 0.5s;
+    background: var(--brand-primary);
+    color: var(--border-default);
+    margin-top: 20px;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    transition: 0.5s;
 }
 
 .Agg-cart:hover {
@@ -512,223 +512,227 @@ body {
 }
 
 .Account-container {
-  width: 100%;
-  min-height: 85vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 30px 15px 60px 15px;
-  box-sizing: border-box;
-  gap: 25px;
+    width: 100%;
+    min-height: 85vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px 60px 15px;
+    box-sizing: border-box;
+    gap: 25px;
 }
 
 .Account-container > h2 {
-  margin: 10px 0 10px 0;
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  font-style: italic;
-  color: var(--text-primary);
+    margin: 10px 0 10px 0;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    font-style: italic;
+    color: var(--text-primary);
 }
 
 /* Contenedor del Dashboard */
 .DashBoard-container {
-  background: var(--bg-secondary);
-  width: 90%;
-  max-width: 1050px;
-  min-height: 220px;
-  border-radius: 24px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
-  border: 2px solid var(--border-default);
+    background: var(--bg-secondary);
+    width: 90%;
+    max-width: 1050px;
+    min-height: 220px;
+    border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 2px solid var(--border-default);
 }
 
 .DashBoard-container > .NavSeparator {
-  height: 60%;
-  width: 2px;
-  background: var(--border-default);
-  border-radius: 2px;
+    height: 60%;
+    width: 2px;
+    background: var(--border-default);
+    border-radius: 2px;
 }
 
 .DashBoard-display {
-  background: var(--border-default);
-  flex: 1;
-  max-width: 280px;
-  height: 150px;
-  border-radius: 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: center;
+    background: var(--border-default);
+    flex: 1;
+    max-width: 280px;
+    height: 150px;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    text-align: center;
 }
 
 .DashBoard-display:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(88, 24, 166, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(88, 24, 166, 0.12);
 }
 
 .Num-display {
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--brand-primary);
-  margin: 0 0 8px 0;
-  line-height: 1;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--brand-primary);
+    margin: 0 0 8px 0;
+    line-height: 1;
 }
 
 .DashBoard-display p:not(.Num-display) {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin: 0;
-  line-height: 1.3;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.3;
 }
 
 .Form-products-users {
-  background: var(--bg-secondary);
-  width: 90%;
-  max-width: 1050px;
-  padding: 28px 32px;
-  border-radius: 24px;
-  box-sizing: border-box;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  border: 2px solid var(--border-default);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px 20px;
-  align-items: end;
+    background: var(--bg-secondary);
+    width: 90%;
+    max-width: 1050px;
+    padding: 28px 32px;
+    border-radius: 24px;
+    box-sizing: border-box;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    border: 2px solid var(--border-default);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 20px;
+    align-items: end;
 }
 
 .Form-products-users h3 {
-  grid-column: 1 / -1;
-  margin: 0 0 10px 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
-  border-bottom: 2px solid var(--border-default);
-  padding-bottom: 10px;
+    grid-column: 1 / -1;
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-default);
+    padding-bottom: 10px;
 }
 
 .Form-products-users label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
 }
 
 .Form-products-users input,
 .Form-products-users select {
-  background: var(--border-default);
-  border: 2px solid transparent;
-  padding: 11px 16px;
-  border-radius: 12px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: var(--text-primary);
-  outline: none;
-  width: 100%;
-  box-sizing: border-box;
-  transition: all 0.25s ease;
+    background: var(--border-default);
+    border: 2px solid transparent;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.25s ease;
 }
 
 .Form-products-users input:focus,
 .Form-products-users select:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 4px rgba(88, 24, 166, 0.1);
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(88, 24, 166, 0.1);
 }
 
-.Form-products-users button[type="submit"] {
-  grid-column: span 1;
-  background: var(--brand-primary);
-  color: #ffffff;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  transition: background 0.3s ease, transform 0.15s ease;
+.Form-products-users button[type='submit'] {
+    grid-column: span 1;
+    background: var(--brand-primary);
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition:
+        background 0.3s ease,
+        transform 0.15s ease;
 }
 
-.Form-products-users button[type="submit"]:hover:not(:disabled) {
-  background: #421080;
-  transform: translateY(-1px);
+.Form-products-users button[type='submit']:hover:not(:disabled) {
+    background: #421080;
+    transform: translateY(-1px);
 }
 
-.Form-products-users button[type="submit"]:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.Form-products-users button[type='submit']:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
-.Form-products-users button[type="button"] {
-  background: transparent;
-  border: 2px solid var(--text-secondary);
-  color: var(--text-secondary);
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  transition: all 0.25s ease;
+.Form-products-users button[type='button'] {
+    background: transparent;
+    border: 2px solid var(--text-secondary);
+    color: var(--text-secondary);
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.25s ease;
 }
 
-.Form-products-users button[type="button"]:hover {
-  background: var(--text-secondary);
-  color: #ffffff;
+.Form-products-users button[type='button']:hover {
+    background: var(--text-secondary);
+    color: #ffffff;
 }
 
 .Error-message {
-  background: #fde8e8;
-  color: #c53030;
-  border: 1px solid #f8b4b4;
-  padding: 12px 20px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 1050px;
-  box-sizing: border-box;
-  font-size: 14px;
-  font-weight: 500;
-  margin: 0;
-  text-align: center;
+    background: #fde8e8;
+    color: #c53030;
+    border: 1px solid #f8b4b4;
+    padding: 12px 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1050px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    text-align: center;
 }
 
 @media (max-width: 850px) {
-  .DashBoard-container {
-    flex-direction: column;
-    gap: 15px;
-    padding: 25px;
-  }
+    .DashBoard-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 25px;
+    }
 
-  .DashBoard-container > .NavSeparator {
-    width: 80%;
-    height: 2px;
-  }
+    .DashBoard-container > .NavSeparator {
+        width: 80%;
+        height: 2px;
+    }
 
-  .DashBoard-display {
-    max-width: 100%;
-    width: 100%;
-  }
+    .DashBoard-display {
+        max-width: 100%;
+        width: 100%;
+    }
 
-  .Form-products-users {
-    grid-template-columns: 1fr;
-  }
+    .Form-products-users {
+        grid-template-columns: 1fr;
+    }
 
-  .Form-products-users button[type="submit"] {
-    grid-column: 1 / -1;
-  }
+    .Form-products-users button[type='submit'] {
+        grid-column: 1 / -1;
+    }
 }
 
 /*Carrito*/
