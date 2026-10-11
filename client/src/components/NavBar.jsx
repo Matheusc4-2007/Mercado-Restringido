@@ -57,6 +57,7 @@ export function NavBar({ page, setPage, usuario, onLogout }) {
                         setPage={setPage}
                         direction="account"
                         />
+                        <span className="NavSeparator"></span>
                         <ButtonNav
                             text={<ShoppingCart />}
                             page={page}

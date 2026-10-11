@@ -15,7 +15,7 @@ body {
     background: var(--bg-primary);
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+    overflow-x:hidden;
 }
 
 /*Home*/
@@ -449,18 +449,18 @@ body {
 }
 
 .Product-card > .Name {
-  text-align: center;
+    text-align: center;
     height: 50px;
-    overflow-y: scroll;
-    font-size: 16px;
+    overflow-y: auto;
+    font-size: 20px;
     width: 100%;
-    margin-bottom: 10px;
     color: var(--text-primary);
 }
 
 .Product-card > .Price {
-  font-size: 20px;
+  font-size: 16px;
   color: #04aa0d;
+  margin-bottom: 5px;
 }
 
 .Product-card > .Seller {
@@ -471,7 +471,7 @@ body {
 .Agg-cart {
   background: var(--brand-primary);
   color: var(--border-default);
-  margin-top: 20px;
+  margin: 10px;
   padding: 12px 20px;
   border-radius: 30px;
   font-size: 14px;
@@ -497,4 +497,240 @@ body {
     background: var(--text-secondary);
     opacity: 0.5;
     border-radius: 10px;
+}
+
+/* ============================
+   ESTILOS GENERALES DE LA CUENTA
+============================ */
+
+.Account-container {
+  width: 100%;
+  min-height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 15px 60px 15px;
+  box-sizing: border-box;
+  gap: 25px;
+}
+
+.Account-container > h2 {
+  margin: 10px 0 10px 0;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+/* Contenedor del Dashboard */
+.DashBoard-container {
+  background: var(--bg-secondary);
+  width: 90%;
+  max-width: 1050px;
+  min-height: 220px;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 2px solid var(--border-default);
+}
+
+.DashBoard-container > .NavSeparator {
+  height: 60%;
+  width: 2px;
+  background: var(--border-default);
+  border-radius: 2px;
+}
+
+.DashBoard-display {
+  background: var(--border-default);
+  flex: 1;
+  max-width: 280px;
+  height: 150px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.DashBoard-display:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(88, 24, 166, 0.12);
+}
+
+.Num-display {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin: 0 0 8px 0;
+  line-height: 1;
+}
+
+.DashBoard-display p:not(.Num-display) {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+
+/* ============================
+   FORMULARIO DE PRODUCTOS (FormProducto)
+============================ */
+
+.Form-products-users {
+  background: var(--bg-secondary);
+  width: 90%;
+  max-width: 1050px;
+  padding: 28px 32px;
+  border-radius: 24px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border: 2px solid var(--border-default);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 20px;
+  align-items: end;
+}
+
+.Form-products-users h3 {
+  grid-column: 1 / -1;
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-default);
+  padding-bottom: 10px;
+}
+
+.Form-products-users label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.Form-products-users input,
+.Form-products-users select {
+  background: var(--border-default);
+  border: 2px solid transparent;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+}
+
+.Form-products-users input:focus,
+.Form-products-users select:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 4px rgba(88, 24, 166, 0.1);
+}
+
+/* Botones del Formulario */
+.Form-products-users button[type="submit"] {
+  grid-column: span 1;
+  background: var(--brand-primary);
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.3s ease, transform 0.15s ease;
+}
+
+.Form-products-users button[type="submit"]:hover:not(:disabled) {
+  background: #421080;
+  transform: translateY(-1px);
+}
+
+.Form-products-users button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.Form-products-users button[type="button"] {
+  background: transparent;
+  border: 2px solid var(--text-secondary);
+  color: var(--text-secondary);
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.25s ease;
+}
+
+.Form-products-users button[type="button"]:hover {
+  background: var(--text-secondary);
+  color: #ffffff;
+}
+
+
+/* ============================
+   MENSAJES DE ERROR Y ESTADOS DE CARGA
+============================ */
+
+.Error-message {
+  background: #fde8e8;
+  color: #c53030;
+  border: 1px solid #f8b4b4;
+  padding: 12px 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 1050px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+}
+
+/* Responsividad para pantallas medianas / pequeñas */
+@media (max-width: 850px) {
+  .DashBoard-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 25px;
+  }
+
+  .DashBoard-container > .NavSeparator {
+    width: 80%;
+    height: 2px;
+  }
+
+  .DashBoard-display {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .Form-products-users {
+    grid-template-columns: 1fr;
+  }
+
+  .Form-products-users button[type="submit"] {
+    grid-column: 1 / -1;
+  }
 }

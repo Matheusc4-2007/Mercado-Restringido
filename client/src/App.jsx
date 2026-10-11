@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { NavBar } from './components/NavBar';
 import { Home } from './components/Home';
@@ -7,6 +7,8 @@ import { AdminPanel } from './components/admin/AdminPanel';
 import { esAdmin } from './utils/admin';
 import { Catalog } from './components/Catalog';
 import Carrito from './components/Carrito';
+import { listarProductos } from './services/productos.service';
+import { Account } from './components/Account';
 
 /*Fondos*/
 
@@ -54,6 +56,25 @@ function App() {
     let [page, setPage] = useState('home');
     let [bg, setBg] = useState(0);
     let [usuario, setUsuario] = useState(null);
+    let [productsUser, setProductsUser] = useState([]);
+    let [cargando, setCargando] = useState(true);
+
+    useEffect(() => {
+        if (!usuario) {
+            setProductsUser([]);
+            setCargando(false);
+            return;
+        }
+
+        setCargando(true);
+        listarProductos()
+            .then((data) => {
+                const userProducts = data.filter(p => p.id_vendedor === usuario.id);
+                setProductsUser(userProducts);
+            })
+            .catch((err) => console.error("Error al cargar productos:", err))
+            .finally(() => setCargando(false));
+    }, [usuario]);
 
     const handleLogin = (u) => {
         setUsuario(u);
@@ -62,6 +83,7 @@ function App() {
 
     const handleLogout = () => {
         setUsuario(null);
+        setProductsUser([]);
         setPage('home');
     };
 
@@ -76,6 +98,7 @@ function App() {
         setBusqueda(texto);
         setPage('catalog');
     };
+    
 
     const renderPage = () => {
         // sergio complicador
@@ -110,8 +133,12 @@ function App() {
                 );
             case 'carrito':
                 return <Carrito />;
+            case 'account':
+                return (
+                  <Account user={usuario} products={productsUser} setProducts={setProductsUser}/>
+                )
             default:
-                return null; // catalog y cart todavía vacíos
+                return null;
         }
     };
 
