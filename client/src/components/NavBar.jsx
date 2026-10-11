@@ -34,7 +34,7 @@ export function NavBar ({page, setPage, usuario , onLogout}) {
       )}
       {usuario ? (
         <>
-          <span className="NavUser">Hola, {usuario.nombre}</span>
+          <ButtonNav text="Cuenta" page={page} setPage={setPage} direction="acount"/>
           <span className='NavSeparator'></span>
           <button className="ButtonNav" onClick={onLogout}>Cerrar Sesion</button>
         </>

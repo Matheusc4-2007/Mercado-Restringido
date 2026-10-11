@@ -66,6 +66,13 @@ h2 {
   font-weight: 600;
 }
 
+h3 {
+  color: var(--brand-primary);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 5px;
+}
+
 .Admin-content form {
   background: var(--bg-secondary);
   padding: 20px;
@@ -188,9 +195,6 @@ td button.btn-eliminar, td button:last-child {
   color: #c53030;
 }
 
-/* ============================
-   ESTILOS PARA FORMULARIOS ADMIN
-============================ */
 .Admin-form {
   background: var(--bg-secondary);
   padding: 25px;
@@ -209,7 +213,6 @@ td button.btn-eliminar, td button:last-child {
   font-weight: 600;
 }
 
-/* Cuadrícula de inputs en el formulario */
 .Admin-form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -246,7 +249,6 @@ td button.btn-eliminar, td button:last-child {
   cursor: not-allowed;
 }
 
-/* Checkbox estilizado */
 .Admin-checkbox-container {
   display: flex;
   align-items: center;
@@ -266,7 +268,6 @@ td button.btn-eliminar, td button:last-child {
   cursor: pointer;
 }
 
-/* Botones de acción del formulario */
 .Admin-form-actions {
   display: flex;
   gap: 10px;
@@ -309,4 +310,49 @@ td button.btn-eliminar, td button:last-child {
 .Admin-btn-secondary:hover {
   background: var(--text-secondary);
   color: var(--border-default);
+}
+
+.Form-products-users {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  width: 100%;
+  height: 60%;
+}
+
+.Form-products-users > label {
+  margin: 3px;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.Form-products-users > input {
+  padding: 10px;
+  width: 90%;
+}
+
+.Result-text {
+  font-size: 16px;
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
+@keyframes Loading {
+  0% {
+    transform: rotate(90deg);
+  }
+  50%{
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.Loading-icon {
+  width: 70px;
+  height: 70px;
+  margin: 25px;
+  animation: Loading 1s ease-in-out; 
 }

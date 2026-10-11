@@ -37,23 +37,25 @@ export function FormProducto({ producto, vendedores, onGuardar, onCancelar }) {
     }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='Form-products-users'>
         <h3>{editando ? 'Editar producto' : 'Nuevo producto'}</h3>
 
-        <label>
+        <label htmlFor='name'>
             Nombre
-            <input
+        </label>
+        <input
                 type="text" 
                 name="nombre"
                 value={datos.nombre} 
                 onChange={handleChange} 
                 required
-            />
-        </label>
+                id='name'
+        />
 
-        <label>
+        <label htmlFor='price'>
             Precio
-            <input
+        </label>
+        <input
                 type="number" 
                 name="precio" 
                 min="0" 
@@ -61,26 +63,29 @@ export function FormProducto({ producto, vendedores, onGuardar, onCancelar }) {
                 value={datos.precio} 
                 onChange={handleChange} 
                 required
-            />
-        </label>
+                id='price'
+        />
 
-        <label>
+        <label htmlFor='img'>
             URL de la imagen
-            <input
+        </label>
+        <input
                 type="url" 
                 name="imagen"
                 value={datos.imagen} 
                 onChange={handleChange} 
                 required
-            />
-        </label>
+                id='img'
+        />
 
         {editando ? (
             <p>Vendedor: {producto.vendedor}</p>
         ) : (
+            <>
             <label>
                 Vendedor
-                <select
+            </label>
+            <select
                     name="id_vendedor"
                     value={datos.id_vendedor} 
                     onChange={handleChange} required
@@ -92,7 +97,7 @@ export function FormProducto({ producto, vendedores, onGuardar, onCancelar }) {
                         </option>
                     ))}
                 </select>
-            </label>
+            </>
         )}
 
         {sinVendedores && (

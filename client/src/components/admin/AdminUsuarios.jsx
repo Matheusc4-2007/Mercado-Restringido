@@ -3,7 +3,7 @@ import { listarUsuarios, crearUsuario, actualizarUsuario, eliminarUsuario, } fro
 import { MensajeError } from './MensajeError'
 import { FormUsuario } from './FormUsuario'
 import { TablaUsuarios } from './TablaUsuarios'
-
+import loading from '../../assets/loading-icon.svg';
 
 export function AdminUsuarios() {
   const [usuarios, setUsuarios] = useState([])
@@ -78,7 +78,10 @@ export function AdminUsuarios() {
       />
 
       {cargando ? (
-        <p>Cargando...</p>
+        <>
+        <img src={loading} alt="Cargando" className='Loading-icon'/>
+        <p className='Result-text'>Cargando productos...</p>
+        </>
       ) : (
         <TablaUsuarios 
           usuarios={usuarios} 

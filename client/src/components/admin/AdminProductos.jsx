@@ -4,6 +4,7 @@ import { listarUsuarios } from '../../services/usuarios.service'
 import { MensajeError } from './MensajeError'
 import { FormProducto } from './FormProducto'
 import { TablaProductos } from './TablaProductos'
+import loading from '../../assets/loading-icon.svg';
 
 export function AdminProductos() {
   const [productos, setProductos] = useState([])
@@ -125,7 +126,10 @@ export function AdminProductos() {
       {filtro && <p>Resultados para "{filtro}"</p>}
 
       {cargando ? (
-        <p>Cargando...</p>
+        <>
+        <img src={loading} alt="Cargando" className='Loading-icon'/>
+        <p className='Result-text'>Cargando productos...</p>
+        </>
       ) : (
         <TablaProductos productos={productos} onEditar={editar} onEliminar={eliminar} />
       )}

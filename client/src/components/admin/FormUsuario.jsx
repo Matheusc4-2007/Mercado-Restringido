@@ -44,12 +44,13 @@ export function FormUsuario({ usuario, onGuardar, onCancelar }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='Form-products-users'>
         <h3>{editando ? 'Editar usuario' : 'Nuevo usuario'}</h3>
 
-        <label>
+        <label htmlFor='c'>
             Cédula
-            <input
+        </label>
+        <input
                 type="text" 
                 name="cedula"
                 inputMode="numeric" 
@@ -59,51 +60,55 @@ export function FormUsuario({ usuario, onGuardar, onCancelar }) {
                 onChange={handleChange} 
                 required
                 disabled={editando && esAdmin(usuario)} // la cédula del admin no se cambia
-            />
-        </label>
+                id='c'
+        />
 
-        <label>
+        <label htmlFor='name'>
             Nombre
-            <input
+        </label>
+        <input
                 type="text" 
                 name="nombre"
                 value={datos.nombre} 
                 onChange={handleChange} 
                 required
+                id='name'
             />
-        </label>
 
-        <label>
+        <label htmlFor='lastName'>
             Apellido
-            <input
+        </label>
+        <input
                 type="text" 
                 name="apellido"
                 value={datos.apellido} 
                 onChange={handleChange} 
                 required
-            />
-        </label>
+                id='lastName'
+        />
 
-        <label>
+        <label htmlFor='date'>
             Fecha de nacimiento
-            <input
+        </label>
+        <input
                 type="date" 
                 name="fecha_nacimiento"
                 value={datos.fecha_nacimiento} 
                 onChange={handleChange} 
                 required
-            />
-        </label>
+                id='date'
+        />
 
-        <label>
-            <input
+        <label htmlFor='seller'>
+        Es vendedor
+        </label>
+        <input
                 type="checkbox" 
                 name="es_vendedor"
                 checked={datos.es_vendedor} 
                 onChange={handleChange}
-            />
-        Es vendedor
-        </label>
+                id='seller'
+        />
 
         <button 
             type="submit" 
