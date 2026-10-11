@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Rat, Info } from 'lucide-react';
 
 export function SearchBar({ valorInicial = '', onBuscar, onFocus, onBlur }) {
     const [texto, setTexto] = useState(valorInicial);
@@ -106,15 +106,10 @@ export function Home({ bg, setBg, backgrounds, setPage, onBuscar }) {
                         Ver Catalogo
                     </button>
                 </div>
-                <div
-                    className="Creators"
-                    style={{
-                        width: '100dvw',
-                        height: '20px',
-                        textAlign: 'center',
-                        background: '#00000088',
-                    }}
-                >
+            </div>
+            <footer className="Footer-home">
+                <Info />
+                <div>
                     <p>
                         Desarrollado por{' '}
                         <a href="https://github.com/kiwig0dd" target="blank">
@@ -133,7 +128,8 @@ export function Home({ bg, setBg, backgrounds, setPage, onBuscar }) {
                         </a>
                     </p>
                 </div>
-            </div>
+                <Rat />
+            </footer>
         </section>
     );
 }

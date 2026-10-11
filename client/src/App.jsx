@@ -6,9 +6,9 @@ import { FormLog } from './components/FormLog';
 import { AdminPanel } from './components/admin/AdminPanel';
 import { esAdmin } from './utils/admin';
 import { Catalog } from './components/Catalog';
-import Carrito from './components/Carrito';
 import { listarProductos } from './services/productos.service';
 import { Account } from './components/Account';
+import { Carrito } from './components/Carrito';
 
 /*Fondos*/
 
@@ -76,12 +76,17 @@ function App() {
             .finally(() => setCargando(false));
     }, [usuario]);
 
+    useEffect(() => {
+        localStorage.clear('carrito');
+    }, []);
+
     const handleLogin = (u) => {
         setUsuario(u);
         setPage(esAdmin(u) ? 'admin' : 'home');
     };
 
     const handleLogout = () => {
+        localStorage.clear('carrito');
         setUsuario(null);
         setProductsUser([]);
         setPage('home');
@@ -129,6 +134,7 @@ function App() {
                         key={busqueda}
                         busqueda={busqueda}
                         onBuscar={buscar}
+                        usuarioExiste={usuario}
                     />
                 );
             case 'carrito':

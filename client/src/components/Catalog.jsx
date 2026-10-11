@@ -5,7 +5,7 @@ import { Product } from './Product';
 import { MensajeError } from './admin/MensajeError';
 import loading from '../assets/loading-icon.svg';
 
-export function Catalog({ busqueda, onBuscar }) {
+export function Catalog({ busqueda, onBuscar, usuarioExiste }) {
     const [productos, setProductos] = useState([]);
     const [error, setError] = useState(null);
     const [cargando, setCargando] = useState(true);
@@ -57,6 +57,16 @@ export function Catalog({ busqueda, onBuscar }) {
 
     return (
         <section className="Catalog-section">
+            {!usuarioExiste ? (
+                <div className="info-catalogo-cuenta">
+                    <p>
+                        Si desea realizar alguna compra le recomendamos Crear
+                        una Cuenta y/o Iniciar Sesión
+                    </p>
+                </div>
+            ) : (
+                ''
+            )}
             <SearchBar valorInicial={busqueda} onBuscar={onBuscar} />
 
             {busqueda && (
@@ -81,11 +91,13 @@ export function Catalog({ busqueda, onBuscar }) {
                     {productos.map((p) => (
                         <Product
                             key={p.id}
+                            id={p.id}
                             name={p.nombre}
                             price={p.precio.toFixed(2)}
                             seller={p.vendedor}
                             img={p.imagen}
                             agregarCarrito={agregarCarrito}
+                            usuarioExiste={usuarioExiste}
                         />
                     ))}
                 </div>

@@ -1,9 +1,19 @@
 import Logo from '../assets/logo.svg';
 import { esAdmin } from '../utils/admin';
-import { ShoppingCart, LogOut } from 'lucide-react';
+import { ShoppingCart, LogOut, User, UserStar } from 'lucide-react';
 
 export function ButtonNav({ text, page, setPage, direction }) {
     const isActive = page == direction;
+    if (direction === 'admin') {
+        return (
+            <button
+                className={isActive ? 'AdminBtn-active' : 'AdminBtn'}
+                onClick={() => setPage(direction)}
+            >
+                {text}
+            </button>
+        );
+    }
 
     return (
         <button
@@ -20,7 +30,7 @@ export function NavBar({ page, setPage, usuario, onLogout }) {
         <nav className="NavBar">
             <a className="NavBar-brand" onClick={() => setPage('home')}>
                 <img src={Logo} className="Logo" />
-                <h1 className='titulo-pagina'>Mercado Restringido</h1>
+                <h1 className="titulo-pagina">Mercado Restringido</h1>
             </a>
             <div className="NavBar-links">
                 <span className="NavSeparator"></span>
@@ -41,7 +51,7 @@ export function NavBar({ page, setPage, usuario, onLogout }) {
                 {esAdmin(usuario) && (
                     <>
                         <ButtonNav
-                            text="Administrar"
+                            text={<UserStar />}
                             page={page}
                             setPage={setPage}
                             direction="admin"
@@ -52,17 +62,21 @@ export function NavBar({ page, setPage, usuario, onLogout }) {
                 {usuario ? (
                     <>
                         <ButtonNav
-                        text="Cuenta"
-                        page={page}
-                        setPage={setPage}
-                        direction="account"
+                            text={
+                                <span className='usuario-view'>
+                                    <User /> {usuario.nombre}
+                                </span>
+                            }
+                            page={page}
+                            setPage={setPage}
+                            direction="account"
                         />
                         <span className="NavSeparator"></span>
                         <ButtonNav
                             text={<ShoppingCart />}
                             page={page}
                             setPage={setPage}
-                            direction="cart"
+                            direction="carrito"
                         />
                         <span className="NavSeparator"></span>
                         <button className="ButtonNav" onClick={onLogout}>

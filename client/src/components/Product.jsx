@@ -7,6 +7,7 @@ export function Product({
     seller = 'Default',
     img = question,
     agregarCarrito,
+    usuarioExiste,
 }) {
     return (
         <div className="Product-card">
@@ -23,7 +24,8 @@ export function Product({
             <p className="Price">{price}$</p>
             <p className="Seller">Vendedor: {seller}</p>
             <button
-                className="Agg-cart"
+                className={usuarioExiste ? 'Agg-cart' : 'Agg-cart-disabled'}
+                disabled={!usuarioExiste}
                 onClick={() => agregarCarrito(id, name, price, seller, img)}
             >
                 Agregar Al Carrito
