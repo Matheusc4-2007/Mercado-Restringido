@@ -1,473 +1,500 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --bg-primary: #C0C0C0;
-  --bg-secondary: #E6E6E6;
-  --border-default: #FFFFFF;
-  --text-primary: #000000;
-  --text-secondary: #909090;
-  --brand-primary: #5818a6;
+    --bg-primary: #c0c0c0;
+    --bg-secondary: #e6e6e6;
+    --border-default: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #909090;
+    --brand-primary: #5818a6;
 }
 
 body {
-  background: var(--bg-primary);
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
+    background: var(--bg-primary);
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 /*Home*/
 
 .NavBar {
-  width: 100%;
-  height: 10vh;
-  background: var(--bg-secondary);
-  display: flex;
-  justify-content: space-between;
-  align-items: center; 
-  padding: 0 2rem; 
-  box-sizing: border-box;
-  border-bottom: 2px solid var(--bg-primary);
+    width: 100%;
+    height: 10vh;
+    background: var(--bg-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    box-sizing: border-box;
+    border-bottom: 2px solid var(--bg-primary);
 }
 
-
 .NavBar-brand {
-  display: flex;
-  align-items: center;
-  gap: 1rem; 
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
 }
 
 .NavBar-brand h1 {
-  color: var(--text-primary);
-  margin: 0;
-  font-size: 28px;
-  font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 28px;
+    font-weight: 500;
 }
 
 .Logo {
-  height: 60px;
-  width: auto;
-  object-fit: contain;
+    height: 60px;
+    width: auto;
+    object-fit: contain;
 }
 
 .NavBar-links {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; 
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .NavSeparator {
-  width: 2px;
-  height: 28px;
-  background-color: var(--text-secondary);
-  opacity: 0.4;
-  border-radius: 2px;
-  margin: 0 0.2rem;
+    width: 2px;
+    height: 28px;
+    background-color: var(--text-secondary);
+    opacity: 0.4;
+    border-radius: 2px;
+    margin: 0 0.2rem;
 }
 
 .ButtonNav {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 16px;
-  font-weight: 400;
-  padding: 0.7rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 25px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 25px;
 }
 
 .ButtonNav:hover {
-  background: var(--bg-primary);
-  color: var(--text-primary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 .ButtonNav-active {
-  background: var(--brand-primary);
-  border: none;
-  color: var(--border-default);
-  font-size: 16px;
-  font-weight: 400;
-  padding: 0.7rem 1.2rem;
-  border-radius: 25px;
-  cursor: pointer;
+    background: var(--brand-primary);
+    border: none;
+    color: var(--border-default);
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0.7rem 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
 }
 
 .Home {
-  width: 100%;
-  height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 30px;
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
 }
 
 @keyframes slideFade {
-  0% {
-    opacity: 0.5;
-    transform: translateX(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    0% {
+        opacity: 0.5;
+        transform: translateX(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .Welcome {
-  box-sizing: border-box;
-  background-position: top;
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-  height: 100%;
-  align-items: center;
-  animation: slideFade 0.6s ease-in-out; 
+    box-sizing: border-box;
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 100%;
+    align-items: center;
+    animation: slideFade 0.6s ease-in-out;
 }
 
 .Home h2 {
-  margin-top: 160px;
-  font-size: 45px;
-  color: var(--border-default);
-  font-weight: 600;
+    margin-top: 160px;
+    font-size: 45px;
+    color: var(--border-default);
+    font-weight: 600;
 }
 
 .Home h3 {
-  font-size: 24px;
-  color: var(--border-default);
-  font-style: italic;
-  letter-spacing: 3px;
+    font-size: 24px;
+    color: var(--border-default);
+    font-style: italic;
+    letter-spacing: 3px;
 }
 
 .SearchBar {
-  display: flex;
-  width: 100%;
-  max-width: 600px;
-  height: 50px;
-  background-color: var(--border-default);
-  border-radius: 25px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 50px;
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    height: 50px;
+    background-color: var(--border-default);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
 }
 
 .SearchBar-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 0 1.5rem;
-  font-size: 16px;
-  font-family: 'Poppins', sans-serif;
-  color: var(--text-primary);
-  background: transparent;
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 0 1.5rem;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-primary);
+    background: transparent;
 }
 
 .SearchBar-button {
-  background-color: var(--brand-primary);
-  color: var(--border-default);
-  border: none;
-  padding: 0 2rem;
-  font-size: 16px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+    background-color: var(--brand-primary);
+    color: var(--border-default);
+    border: none;
+    padding: 0 2rem;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .SearchBar-button:hover {
-  background-color: #3f1178;
+    background-color: #3f1178;
 }
 
 .Arrow {
-  font-size: 40px;
-  background: #5556;
-  border-radius: 30px;
-  transition: 0.5s;
-  padding: 6px 26px;
-  border-radius: 100%;
-  color: var(--border-default);
+    font-size: 40px;
+    background: #5556;
+    border-radius: 30px;
+    transition: 0.5s;
+    padding: 6px 26px;
+    border-radius: 100%;
+    color: var(--border-default);
 }
 
 .Arrow:hover {
-  cursor: pointer;
-  transform: scale(1.05);
-  transition: 0.5s;
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: 0.5s;
 }
 
 .Buttons-welcome {
-  width: 100%;
-  min-height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .Buttons-welcome button {
-  color: var(--text-primary);
-  background: var(--bg-secondary);
-  border-radius: 40px;
-  padding: 20px;
-  margin: 50px 20px;
-  transition: 0.5s;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border-radius: 40px;
+    padding: 20px;
+    margin: 50px 20px;
+    transition: 0.5s;
 }
 
 .Buttons-welcome button:hover {
-  transition: 0.5s;
-  transform: scale(1.07);
-  cursor: pointer;
-  background: var(--brand-primary);
-  color: var(--border-default);
+    transition: 0.5s;
+    transform: scale(1.07);
+    cursor: pointer;
+    background: var(--brand-primary);
+    color: var(--border-default);
 }
 
 .Creators {
-  margin-top: 120px;
-  color: var(--text-secondary);
-  font-size: 14px;
-  letter-spacing: 2px;
-  font-weight: 400;
+    position: absolute;
+    bottom: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-weight: 400;
 }
 
 .Creators > a {
-  color: var(--border-default);
+    color: var(--border-default);
 }
 
 /*Login*/
 
 .Form-container {
-  width: 100%;
-  height: calc(100vh - 84px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-primary); 
+    width: 100%;
+    height: calc(100vh - 84px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
 }
 
 .Form-login {
-  display: flex;
-  width: 100%;
-  max-width: 450px;
-  background: var(--bg-secondary);
-  border-radius: 20px;
-  padding: 40px;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  animation: slideFade 0.6s ease-in-out; 
+    display: flex;
+    width: 100%;
+    max-width: 450px;
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    padding: 40px;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: slideFade 0.6s ease-in-out;
 }
 
 .Form-title {
-  color: var(--text-primary);
-  margin: 20px 0;
-  font-size: 24px;
-  font-weight: 600;
+    color: var(--text-primary);
+    margin: 20px 0;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .Select-container {
-  background: var(--bg-primary);
-  padding: 5px;
-  width: 100%;
-  border-radius: 30px;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+    background: var(--bg-primary);
+    padding: 5px;
+    width: 100%;
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .Select-button {
-  flex: 1; 
-  padding: 10px 20px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  border-radius: 25px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Poppins', sans-serif;
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
 }
 
 .Select-button.active {
-  background: var(--border-default);
-  color: var(--brand-primary);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: var(--border-default);
+    color: var(--brand-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .Form-input {
-  background: var(--border-default);
-  color: var(--text-primary);
-  padding: 0 20px;
-  width: 100%;
-  height: 50px;
-  margin: 10px 0;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  outline: none;
+    background: var(--border-default);
+    color: var(--text-primary);
+    padding: 0 20px;
+    width: 100%;
+    height: 50px;
+    margin: 10px 0;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
 }
 
 .Form-input:focus {
-  border: 2px solid var(--brand-primary);
+    border: 2px solid var(--brand-primary);
 }
 
 .Checkbox-container {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 10px;
-  margin: 5px 0 20px 0;
-  color: var(--text-secondary);
-  font-size: 15px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    margin: 5px 0 20px 0;
+    color: var(--text-secondary);
+    font-size: 15px;
 }
 
 .Form-checkbox {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--brand-primary);
-  cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--brand-primary);
+    cursor: pointer;
 }
 
 .Submit-button {
-  width: 100%;
-  height: 50px;
-  background: var(--brand-primary);
-  color: var(--border-default);
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  margin-top: 10px;
-  font-family: 'Poppins', sans-serif;
+    width: 100%;
+    height: 50px;
+    background: var(--brand-primary);
+    color: var(--border-default);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .Submit-button:hover {
-  background: #3f1178;
+    background: #3f1178;
 }
 
 /*Esto lo añadio sergio no se que hace*/
 
 .Form-error {
-  background: #fdecea;
-  color: #b3261e;
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  font-size: 0.9rem;
+    background: #fdecea;
+    color: #b3261e;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
 }
-.Form-error ul { margin: 0.3rem 0 0 1.1rem; list-style: disc; }
-.Submit-button:disabled { opacity: 0.6; cursor: not-allowed; }
+.Form-error ul {
+    margin: 0.3rem 0 0 1.1rem;
+    list-style: disc;
+}
+.Submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
 .NavUser {
-  color: var(--brand-primary);
-  font-weight: 600;
-  padding: 0 0.8rem;
+    color: var(--brand-primary);
+    font-weight: 600;
+    padding: 0 0.8rem;
 }
 
 /*Catalogo*/
 
 .Catalog-section {
-  width: 100%;
-  height: 90vh;
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--bg-primary);
+    width: 100%;
+    height: 90vh;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--bg-primary);
 }
 
 .Catalog-section > .SearchBar {
-  margin-top: 20px;
-  margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .Products-container {
-  width: 95%;
-  max-width: 1450px;
-  height: calc(90vh - 90px);
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-  padding: 10px 20px 30px 20px;
-  box-sizing: border-box;
+    width: 95%;
+    max-width: 1450px;
+    height: calc(90vh - 90px);
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 20px 20px 30px 20px;
+    box-sizing: border-box;
+}
+@media screen and (max-width: 850px) {
+    .Products-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media screen and (max-width: 500px) {
+    .Products-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media screen and (max-width: 300px) {
+    .Products-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
 
 .Product-card {
-  background: var(--border-default);
-  height: 400px;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  color: var(--text-secondary);
-  font-weight: 600;
-  overflow: hidden;
-  transition: 0.5s;
+    background: var(--border-default);
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-weight: 600;
+    overflow: hidden;
+    transition: 0.5s;
+    padding: 10px;
+    height: min-content;
 }
 
 .Product-card:hover {
-  cursor: pointer;
-  transform: translateY(-5px);
-  transition: 0.5s;
+    transform: translateY(-5px);
+    transition: 0.5s;
 }
 
 .Product-card > .Img {
-  width: 100%;
-  height: 60%;
-  border-radius: 10px;
-  margin: 0 0 10px 0;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 0 0 10px 0;
 }
 
 .Product-card > .Name {
-  font-size: 16px;
-  color: var(--text-primary);
+  text-align: center;
+    height: 60px;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 10px;
+    color: var(--text-primary);
 }
 
 .Product-card > .Price {
-  font-size: 20px;
-  color: #04aa0d;
+    font-size: 20px;
+    color: #04aa0d;
 }
 
 .Product-card > .Seller {
-  color: var(--text-secondary);
-  font-size: 12px;
+    color: var(--text-secondary);
+    font-size: 12px;
 }
 
 .Agg-cart {
-  background: var(--brand-primary);
-  color: var(--border-default);
-  margin-top: 20px;
-  padding: 12px 20px;
-  border-radius: 30px;
-  font-size: 14px;
-  transition: 0.5s;
+    background: var(--brand-primary);
+    color: var(--border-default);
+    margin-top: 20px;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    transition: 0.5s;
 }
 
 .Agg-cart:hover {
-  cursor: pointer;
-  transform: scale(1.05);
-  transition: 0.5s;
-  background-color: #3f1178;
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: 0.5s;
+    background-color: #3f1178;
 }
 
 .Products-container::-webkit-scrollbar {
-  width: 8px;
+    width: 8px;
 }
 
 .Products-container::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
 
 .Products-container::-webkit-scrollbar-thumb {
-  background: var(--text-secondary);
-  opacity: 0.5;
-  border-radius: 10px;
+    background: var(--text-secondary);
+    opacity: 0.5;
+    border-radius: 10px;
 }
