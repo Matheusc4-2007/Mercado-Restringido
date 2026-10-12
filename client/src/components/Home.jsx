@@ -11,7 +11,7 @@ export function SearchBar({
     const [texto, setTexto] = useState(valorInicial);
 
     useEffect(() => {
-        setTexto('valorInicial');
+        setTexto(valorInicial);
     }, [valorInicial]);
 
     useEffect(() => {
