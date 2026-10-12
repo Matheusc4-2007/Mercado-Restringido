@@ -15,6 +15,8 @@ export function Product({
                 src={img}
                 alt="Imagen del Producto"
                 className="Img"
+                loading="lazy"
+                decoding="async"
                 onError={(e) => {
                     e.currentTarget.onerror = null; // evita un bucle
                     e.currentTarget.src = question;

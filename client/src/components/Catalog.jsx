@@ -9,6 +9,13 @@ export function Catalog({ busqueda, onBuscar, usuarioExiste }) {
     const [productos, setProductos] = useState([]);
     const [error, setError] = useState(null);
     const [cargando, setCargando] = useState(true);
+    const [aviso, setAviso] = useState(null);
+
+    useEffect(() => {
+        if (!aviso) return;
+        const t = setTimeout(() => setAviso(null), 2500);
+        return () => clearTimeout(t);
+    }, [aviso]);
 
     const [carritoData, setCarritoData] = useState(() => {
         return JSON.parse(localStorage.getItem('carrito')) || [];
@@ -29,7 +36,7 @@ export function Catalog({ busqueda, onBuscar, usuarioExiste }) {
                         : item,
                 );
             }
-
+            setAviso({ texto: `${nombre} se ha añadido a su carrito` });
             return [
                 ...prev,
                 {
@@ -100,6 +107,11 @@ export function Catalog({ busqueda, onBuscar, usuarioExiste }) {
                             usuarioExiste={usuarioExiste}
                         />
                     ))}
+                </div>
+            )}
+            {aviso && (
+                <div className="Toast" role="status" aria-live="polite">
+                    {aviso.texto}
                 </div>
             )}
         </section>
