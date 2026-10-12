@@ -1,21 +1,9 @@
-# Client (React + Vite + Tailwind) 
+# Mercado Restringido, mini-proyecto basado en Mercado Libre
+###### E-Actividad 2.1 FrontEndII 2026C. *Universidad Valle del Momboy*
 
-Minimo Setup para trabajar en vite con React, js y tailwind con reglas ESLint . para ver los mensajes que manda Eslint recomiendo instalas su extención vscode
+> **Alumnos:**
+> - José Godoy V-32.006.867
+> - Nelson Sandoval V-32.066.084
+> - Sergio Cuevas V-32.268.736
 
-
-# Server (Express , Cord , Dotenv , Mysql2)
-
-configuracion simple y minima para crear solo los archivos necesario para transportar datos
-pienso hacer  una logica (routes - controllers - models) utilizando variables resguardadas en .env y cors para evitar el bloqueo del navegador en los puertos a utilizar
-
-# importante
-
-Instalar pnpm con: [  npm install -g pnpm  ]  y menejar igual  que npm los comandos basicos  
-como [ pnpm install] o [ pnpm run dev ] puesto si no los archivos package.json al hacer push sera diferentes y duplicados 
-
-## Variables Env en server  
-    PORT=3000
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=
-    DB_NAME=MercadoRestringido
+Este proyecto utiliza React y TailwindCSS para su construcción. 
