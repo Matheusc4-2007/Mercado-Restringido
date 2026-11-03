@@ -1,66 +1,66 @@
 import { useEffect, useState } from 'react'
-import { listarUsuarios, crearUsuario, actualizarUsuario, eliminarUsuario, } from '../../services/usuarios.service'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  cargarUsuarios,
+  crearUsuario,
+  actualizarUsuario,
+  eliminarUsuario,
+  reiniciarUsuarios,
+  limpiarErrorUsuarios,
+  selectUsuarios,
+  selectUsuariosCargando,
+  selectUsuariosError,
+} from '../../app/usuariosSlice'
 import { MensajeError } from './MensajeError'
 import { FormUsuario } from './FormUsuario'
 import { TablaUsuarios } from './TablaUsuarios'
 import loading from '../../assets/loading-icon.svg';
 
 export function AdminUsuarios() {
-  const [usuarios, setUsuarios] = useState([])
+  const dispatch = useDispatch()
+  const usuarios = useSelector(selectUsuarios)
+  const cargando = useSelector(selectUsuariosCargando)
+  const error = useSelector(selectUsuariosError)
+
   const [idEditando, setIdEditando] = useState(null) // null = nadie se edita
-  const [error, setError] = useState(null)
-  const [cargando, setCargando] = useState(true)
 
+  // Carga la lista al entrar y la limpia al salir
   useEffect(() => {
-    let activo = true
-    listarUsuarios()
-      .then((data) => activo && setUsuarios(data))
-      .catch((err) => activo && setError(err))
-      .finally(() => activo && setCargando(false))
+    dispatch(cargarUsuarios())
     return () => {
-      activo = false
+      dispatch(reiniciarUsuarios())
     }
-  }, [])
-
-  const recargar = async () => setUsuarios(await listarUsuarios())
+  }, [dispatch])
 
   const editando = usuarios.find((u) => u.id === idEditando)
 
   const editar = (id) => {
-    setError(null)
+    dispatch(limpiarErrorUsuarios())
     setIdEditando(id)
   }
 
   const cancelar = () => {
-    setError(null)
+    dispatch(limpiarErrorUsuarios())
     setIdEditando(null)
   }
 
   // Devuelve true si salió bien (el formulario lo usa para limpiarse)
   const guardar = async (datos) => {
-    setError(null)
-    try {
-      if (editando) await actualizarUsuario(editando.id, datos)
-      else await crearUsuario(datos)
-      await recargar()
-      setIdEditando(null)
-      return true
-    } 
-    catch (err) {
-      setError(err)
-      return false
-    }
+    const accion = editando
+      ? actualizarUsuario({ id: editando.id, datos })
+      : crearUsuario(datos)
+    const res = await dispatch(accion)
+    const ok = res.meta.requestStatus === 'fulfilled'
+    if (ok) setIdEditando(null)
+    return ok
   }
 
   const eliminar = async (usuario) => {
     if (!window.confirm(`¿Eliminar a ${usuario.nombre} ${usuario.apellido}?`)) return
-    setError(null)
-    try {
-      await eliminarUsuario(usuario.id)
-      if (usuario.id === idEditando) setIdEditando(null)
-      await recargar()
-    } catch (err) {
-      setError(err) // ej: "No se puede eliminar: tiene productos publicados"
+    // si falla, el error llega al store (ej: "No se puede eliminar: tiene productos publicados")
+    const res = await dispatch(eliminarUsuario(usuario.id))
+    if (res.meta.requestStatus === 'fulfilled' && usuario.id === idEditando) {
+      setIdEditando(null)
     }
   }
 

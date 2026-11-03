@@ -1,96 +1,91 @@
 import { useEffect, useState } from 'react'
-import { listarProductos, crearProducto, actualizarProducto, eliminarProducto } from '../../services/productos.service'
-import { listarUsuarios } from '../../services/usuarios.service'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  cargarProductos,
+  crearProducto,
+  actualizarProducto,
+  eliminarProducto,
+  reiniciarProductos,
+  limpiarErrorProductos,
+  selectProductos,
+  selectFiltroProductos,
+  selectProductosCargando,
+  selectProductosError,
+} from '../../app/productosSlice'
+import {
+  cargarUsuarios,
+  reiniciarUsuarios,
+  selectVendedores,
+  selectUsuariosCargando,
+  selectUsuariosError,
+} from '../../app/usuariosSlice'
 import { MensajeError } from './MensajeError'
 import { FormProducto } from './FormProducto'
 import { TablaProductos } from './TablaProductos'
 import loading from '../../assets/loading-icon.svg';
 
 export function AdminProductos() {
-  const [productos, setProductos] = useState([])
-  const [vendedores, setVendedores] = useState([])
+  const dispatch = useDispatch()
+  const productos = useSelector(selectProductos)
+  const filtro = useSelector(selectFiltroProductos) // el filtro aplicado
+  const vendedores = useSelector(selectVendedores)
+  const cargandoProductos = useSelector(selectProductosCargando)
+  const cargandoUsuarios = useSelector(selectUsuariosCargando)
+  const cargando = cargandoProductos || cargandoUsuarios
+  const errorProductos = useSelector(selectProductosError)
+  const errorUsuarios = useSelector(selectUsuariosError)
+  const error = errorProductos ?? errorUsuarios
+
   const [idEditando, setIdEditando] = useState(null)
-  const [busqueda, setBusqueda] = useState('') 
-  const [filtro, setFiltro] = useState('')     // el filtro aplicado
-  const [error, setError] = useState(null)
-  const [cargando, setCargando] = useState(true)
+  const [busqueda, setBusqueda] = useState('') // lo que se escribe en el input
 
+  // Carga productos y vendedores al entrar y limpia ambas listas al salir
   useEffect(() => {
-    let activo = true
-    Promise.all([listarProductos(), listarUsuarios()])
-      .then(([prods, usuarios]) => {
-        if (!activo) return
-        setProductos(prods)
-        setVendedores(usuarios.filter((u) => u.es_vendedor))
-      })
-      .catch((err) => activo && setError(err))
-      .finally(() => activo && setCargando(false))
+    dispatch(cargarProductos())
+    dispatch(cargarUsuarios())
     return () => {
-      activo = false
+      dispatch(reiniciarProductos())
+      dispatch(reiniciarUsuarios())
     }
-  }, [])
-
-  const recargar = async (nombre = filtro) =>
-    setProductos(await listarProductos(nombre))
+  }, [dispatch])
 
   const editando = productos.find((p) => p.id === idEditando)
 
   const editar = (id) => {
-    setError(null)
+    dispatch(limpiarErrorProductos())
     setIdEditando(id)
   }
 
   const cancelar = () => {
-    setError(null)
+    dispatch(limpiarErrorProductos())
     setIdEditando(null)
   }
 
-  const buscar = async (e) => {
+  const buscar = (e) => {
     e.preventDefault()
-    setError(null)
-    const texto = busqueda.trim()
-    try {
-      await recargar(texto)
-      setFiltro(texto)
-    } catch (err) {
-      setError(err)
-    }
+    dispatch(cargarProductos(busqueda.trim()))
   }
 
-  const limpiarBusqueda = async () => {
+  const limpiarBusqueda = () => {
     setBusqueda('')
-    setFiltro('')
-    setError(null)
-    try {
-      await recargar('')
-    } catch (err) {
-      setError(err)
-    }
+    dispatch(cargarProductos(''))
   }
 
   const guardar = async (datos) => {
-    setError(null)
-    try {
-      if (editando) await actualizarProducto(editando.id, datos)
-      else await crearProducto(datos)
-      await recargar()
-      setIdEditando(null)
-      return true
-    } catch (err) {
-      setError(err)
-      return false
-    }
+    const accion = editando
+      ? actualizarProducto({ id: editando.id, datos })
+      : crearProducto(datos)
+    const res = await dispatch(accion)
+    const ok = res.meta.requestStatus === 'fulfilled'
+    if (ok) setIdEditando(null)
+    return ok
   }
 
   const eliminar = async (producto) => {
     if (!window.confirm(`¿Eliminar "${producto.nombre}"?`)) return
-    setError(null)
-    try {
-      await eliminarProducto(producto.id)
-      if (producto.id === idEditando) setIdEditando(null)
-      await recargar()
-    } catch (err) {
-      setError(err)
+    const res = await dispatch(eliminarProducto(producto.id))
+    if (res.meta.requestStatus === 'fulfilled' && producto.id === idEditando) {
+      setIdEditando(null)
     }
   }
   

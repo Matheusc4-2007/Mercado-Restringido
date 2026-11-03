@@ -1,6 +1,9 @@
+import { useDispatch, useSelector } from 'react-redux';
 import Logo from '../assets/logo.webp';
 import { esAdmin } from '../utils/admin';
 import { ShoppingCart, LogOut, User, UserStar } from 'lucide-react';
+import { logout, selectUsuario } from '../app/authSlice';
+import { irA, selectPage } from '../app/uiSlice';
 
 export function ButtonNav({ text, page, setPage, direction }) {
     const isActive = page == direction;
@@ -25,7 +28,16 @@ export function ButtonNav({ text, page, setPage, direction }) {
     );
 }
 
-export function NavBar({ page, setPage, usuario, onLogout }) {
+// ButtonNav sigue siendo presentacional (recibe todo por props);
+// NavBar le entrega los datos que obtiene del store.
+export function NavBar() {
+    const dispatch = useDispatch();
+    const page = useSelector(selectPage);
+    const usuario = useSelector(selectUsuario);
+
+    const setPage = (destino) => dispatch(irA(destino));
+    const onLogout = () => dispatch(logout());
+
     return (
         <nav className="NavBar">
             <a className="NavBar-brand" onClick={() => setPage('home')}>
@@ -101,3 +113,4 @@ export function NavBar({ page, setPage, usuario, onLogout }) {
         </nav>
     );
 }
+

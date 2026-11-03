@@ -1,12 +1,19 @@
 import { DashBoard } from './DashBoard';
 import { TablaProductos } from './admin/TablaProductos';
 import { useEffect, useState } from 'react'
-import { 
-  listarProductos, 
-  crearProducto, 
-  actualizarProducto, 
-  eliminarProducto 
-} from '../services/productos.service'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectUsuario } from '../app/authSlice'
+import {
+  cargarProductos,
+  crearProducto,
+  actualizarProducto,
+  eliminarProducto,
+  reiniciarProductos,
+  limpiarErrorProductos,
+  selectProductosDeVendedor,
+  selectProductosCargando,
+  selectProductosError,
+} from '../app/productosSlice'
 
 export function FormProducto({ producto, vendedores = [], userId, onGuardar, onCancelar }) {
   const VACIO = { nombre: '', precio: '', imagen: '', id_vendedor: userId || '' }
@@ -112,64 +119,52 @@ export function FormProducto({ producto, vendedores = [], userId, onGuardar, onC
   )
 }
 
-export function Account({ user, products, setProducts }) {
+export function Account() {
+  const dispatch = useDispatch()
+  const user = useSelector(selectUsuario)
+  const products = useSelector((state) => selectProductosDeVendedor(state, user.id))
+  const cargando = useSelector(selectProductosCargando)
+  const error = useSelector(selectProductosError)
+
   const name = user.nombre
   const [idEditando, setIdEditando] = useState(null)
-  const [error, setError] = useState(null)
-  const [cargando, setCargando] = useState(true)
 
-  const recargar = async () => {
-    try {
-      const data = await listarProductos()
-      const userProducts = data.filter((p) => p.id_vendedor === user.id)
-      setProducts(userProducts)
-    } catch (err) {
-      setError(err)
-    }
-  }
-
+  // Carga la lista al entrar y la limpia al salir
   useEffect(() => {
-    recargar().finally(() => setCargando(false))
-  }, [user.id])
+    dispatch(cargarProductos())
+    return () => {
+      dispatch(reiniciarProductos())
+    }
+  }, [dispatch])
 
   const editando = products.find((p) => p.id === idEditando)
 
   const editar = (id) => {
-    setError(null)
+    dispatch(limpiarErrorProductos())
     setIdEditando(id)
   }
 
   const cancelar = () => {
-    setError(null)
+    dispatch(limpiarErrorProductos())
     setIdEditando(null)
   }
 
+  // Devuelve true si salió bien (el formulario lo usa para limpiarse)
   const guardar = async (datos) => {
-    setError(null)
-    try {
-      if (editando) {
-        await actualizarProducto(editando.id, datos)
-      } else {
-        await crearProducto(datos)
-      }
-      await recargar()
-      setIdEditando(null)
-      return true
-    } catch (err) {
-      setError(err)
-      return false
-    }
+    const accion = editando
+      ? actualizarProducto({ id: editando.id, datos })
+      : crearProducto(datos)
+    const res = await dispatch(accion)
+    const ok = res.meta.requestStatus === 'fulfilled'
+    if (ok) setIdEditando(null)
+    return ok
   }
 
   const eliminar = async (producto) => {
     if (!window.confirm(`¿Eliminar "${producto.nombre}"?`)) return
-    setError(null)
-    try {
-      await eliminarProducto(producto.id)
-      if (producto.id === idEditando) setIdEditando(null)
-      await recargar()
-    } catch (err) {
-      setError(err)
+    const res = await dispatch(eliminarProducto(producto.id))
+    if (res.meta.requestStatus === 'fulfilled' && producto.id === idEditando) {
+      setIdEditando(null)
     }
   }
 
@@ -185,7 +180,7 @@ export function Account({ user, products, setProducts }) {
         <DashBoard products={products} model={3} />
       </div>
 
-      {error && <p className="Error-message">{String(error)}</p>}
+      {error && <p className="Error-message">{error.message}</p>}
 
       <FormProducto
         key={idEditando ?? 'nuevo'}

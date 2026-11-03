@@ -1,109 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import './App.css';
 import { NavBar } from './components/NavBar';
 import { Home } from './components/Home';
 import { FormLog } from './components/FormLog';
 import { AdminPanel } from './components/admin/AdminPanel';
-import { esAdmin } from './utils/admin';
 import { Catalog } from './components/Catalog';
-import { listarProductos } from './services/productos.service';
 import { Account } from './components/Account';
 import { Carrito } from './components/Carrito';
-
-/*Fondos*/
-
-import bg1 from './assets/bg-landing-7.webp';
-import bg2 from './assets/bg-landing-3.webp';
-import bg3 from './assets/bg-landing-4.webp';
-import bg4 from './assets/bg-landing-5.webp';
-import bg5 from './assets/bg-landing-2.webp';
-
-// para cambiar los fondos
-const backgrounds = [
-    {
-        id: 0,
-        url: bg1,
-        subtittle: 'gran catálogo en ropas',
-        color: '#C9BCB5',
-    },
-    {
-        id: 1,
-        url: bg2,
-        subtittle: 'tus marcas favoritas',
-        color: '#FED338',
-    },
-    {
-        id: 2,
-        url: bg3,
-        subtittle: 'lo último en tecnología',
-        color: '#232323',
-    },
-    {
-        id: 3,
-        url: bg4,
-        subtittle: 'articulos para tu hogar',
-        color: '#C4C5CD',
-    },
-    {
-        id: 4,
-        url: bg5,
-        subtittle: 'todo en cosmeticos y cuidado personal',
-        color: '#F2EEEC',
-    },
-];
+import { esAdmin } from './utils/admin';
+import { selectUsuario } from './app/authSlice';
+import { selectPage, selectBusqueda } from './app/uiSlice';
 
 function App() {
-    let [page, setPage] = useState('home');
-    let [bg, setBg] = useState(0);
-    let [usuario, setUsuario] = useState(null);
-    let [productsUser, setProductsUser] = useState([]);
-    let [cargando, setCargando] = useState(true);
-
-    useEffect(() => {
-        if (!usuario) {
-            setProductsUser([]);
-            setCargando(false);
-            return;
-        }
-
-        setCargando(true);
-        listarProductos()
-            .then((data) => {
-                const userProducts = data.filter(p => p.id_vendedor === usuario.id);
-                setProductsUser(userProducts);
-            })
-            .catch((err) => console.error("Error al cargar productos:", err))
-            .finally(() => setCargando(false));
-    }, [usuario]);
-
-    useEffect(() => {
-        localStorage.clear('carrito');
-    }, []);
-
-    const handleLogin = (u) => {
-        setUsuario(u);
-        setPage(esAdmin(u) ? 'admin' : 'home');
-    };
-
-    const handleLogout = () => {
-        localStorage.clear('carrito');
-        setUsuario(null);
-        setProductsUser([]);
-        setPage('home');
-    };
-
-    let [busqueda, setBusqueda] = useState('');
-
-    const irA = (destino) => {
-        if (destino === 'catalog') setBusqueda('');
-        setPage(destino);
-    };
-
-    const buscar = (texto) => {
-        setBusqueda(texto);
-        setPage('catalog');
-    };
-    
+    const page = useSelector(selectPage);
+    const busqueda = useSelector(selectBusqueda);
+    const usuario = useSelector(selectUsuario);
 
     const renderPage = () => {
         // sergio complicador
@@ -111,17 +22,9 @@ function App() {
             page // podemos agregar mas cosas si es necesario y no tenemos un mar de returns
         ) {
             case 'home':
-                return (
-                    <Home
-                        bg={bg}
-                        setBg={setBg}
-                        backgrounds={backgrounds}
-                        setPage={setPage}
-                        onBuscar={buscar}
-                    />
-                );
+                return <Home />;
             case 'login':
-                return <FormLog onLogin={handleLogin} />;
+                return <FormLog />;
             case 'admin':
                 return esAdmin(usuario) ? (
                     <AdminPanel />
@@ -129,20 +32,15 @@ function App() {
                     <p>Acceso restringido</p>
                 );
             case 'catalog':
-                return (
-                    <Catalog
-                        key={busqueda}
-                        busqueda={busqueda}
-                        onBuscar={buscar}
-                        usuarioExiste={usuario}
-                    />
-                );
+                return <Catalog key={busqueda} />;
             case 'carrito':
                 return <Carrito />;
             case 'account':
-                return (
-                  <Account user={usuario} products={productsUser} setProducts={setProductsUser}/>
-                )
+                return usuario?.es_vendedor ? (
+                    <Account />
+                ) : (
+                    <p>Acceso restringido</p>
+                );
             default:
                 return null;
         }
@@ -150,12 +48,7 @@ function App() {
 
     return (
         <>
-            <NavBar
-                page={page}
-                setPage={irA}
-                usuario={usuario}
-                onLogout={handleLogout}
-            />
+            <NavBar />
             {renderPage()}
         </>
     );

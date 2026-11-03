@@ -1,5 +1,12 @@
-import { useState } from 'react';
-import { crearUsuario, buscarPorCedula } from '../services/usuarios.service'
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  iniciarSesion,
+  registrarse,
+  limpiarErrorAuth,
+  selectAuthCargando,
+  selectAuthError,
+} from '../app/authSlice';
 
 const FORM_INICIAL = {
   cedula: '',
@@ -9,15 +16,22 @@ const FORM_INICIAL = {
   es_vendedor: false,
 }
 
-export function FormLog({onLogin}) {
+export function FormLog() {
+  const dispatch = useDispatch()
+  const cargando = useSelector(selectAuthCargando)
+  const error = useSelector(selectAuthError)
+
   const [isLogin, setIsLogin] = useState(true);
   const [datos, setDatos] = useState(FORM_INICIAL)
-  const [error, setError] = useState(null)
-  const [cargando, setCargando] = useState(false)
+
+  // Al entrar al formulario no debe verse un error de un intento anterior
+  useEffect(() => {
+    dispatch(limpiarErrorAuth())
+  }, [dispatch])
 
   const cambiarModo = (login) => {
     setIsLogin(login)
-    setError(null)
+    dispatch(limpiarErrorAuth())
   }
 
   const handleChange = (e) => {
@@ -28,21 +42,10 @@ export function FormLog({onLogin}) {
     }))
   }
 
-  const handleSubmit = async (e) => {
+  // Si sale bien, el store guarda al usuario y uiSlice cambia de página
+  const handleSubmit = (e) => {
     e.preventDefault()
-    setError(null)
-    setCargando(true)
-    try {
-      // registrar devuelve el usuario creado, así que entra directo
-      const usuario = isLogin
-        ? await buscarPorCedula(datos.cedula)
-        : await crearUsuario(datos)
-      onLogin(usuario)
-    } catch (err) {
-      setError(err)
-    } finally {
-      setCargando(false)
-    }
+    dispatch(isLogin ? iniciarSesion(datos.cedula) : registrarse(datos))
   }
 
   return (

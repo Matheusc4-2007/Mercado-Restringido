@@ -1,21 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { eliminarItem, selectCarrito, selectTotalCarrito } from '../app/carritoSlice';
 
 export function Carrito() {
-    const [carrito, setCarrito] = useState(() => {
-        return JSON.parse(localStorage.getItem('carrito')) || [];
-    });
-    useEffect(() => {
-        localStorage.setItem('carrito', JSON.stringify(carrito));
-    }, [carrito]);
+    const dispatch = useDispatch();
+    const carrito = useSelector(selectCarrito);
+    const totalCarrito = useSelector(selectTotalCarrito);
 
     function eliminarCarrito(id) {
-        setCarrito((prev) => prev.filter((elem) => elem.idCompra !== id));
+        dispatch(eliminarItem(id));
     }
-
-    const totalCarrito = carrito.reduce(
-        (acc, elem) => acc + Number(elem.precioCompra) * elem.cantidad,
-        0,
-    );
 
     return (
         <section className="Carrito-section">

@@ -1,59 +1,49 @@
-import { useEffect, useState } from 'react';
-import { listarProductos } from '../services/productos.service';
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { SearchBar } from './Home';
 import { Product } from './Product';
 import { MensajeError } from './admin/MensajeError';
 import loading from '../assets/loading-icon.svg';
+import { selectUsuario } from '../app/authSlice'
+import { selectBusqueda, selectAviso, buscarEnCatalogo, limpiarAviso } from '../app/uiSlice';
+import {
+    cargarProductos,
+    reiniciarProductos,
+    selectProductos,
+    selectProductosCargando,
+    selectProductosError,
+} from '../app/productosSlice';
 
-export function Catalog({ busqueda, onBuscar, usuarioExiste }) {
-    const [productos, setProductos] = useState([]);
-    const [error, setError] = useState(null);
-    const [cargando, setCargando] = useState(true);
+export function Catalog() {
+    const dispatch = useDispatch();
+    const busqueda = useSelector(selectBusqueda);
+    const usuarioExiste = useSelector(selectUsuario);
+    const productos = useSelector(selectProductos);
+    const cargando = useSelector(selectProductosCargando);
+    const error = useSelector(selectProductosError);
+    const aviso = useSelector(selectAviso);
 
-    const [carritoData, setCarritoData] = useState(() => {
-        return JSON.parse(localStorage.getItem('carrito')) || [];
-    });
-
+    // El aviso se oculta solo a los 2.5 s y no se arrastra a otras vistas
     useEffect(() => {
-        localStorage.setItem('carrito', JSON.stringify(carritoData));
-    }, [carritoData]);
+        if (!aviso) return;
+        const t = setTimeout(() => dispatch(limpiarAviso()), 2500);
+        return () => clearTimeout(t);
+    }, [aviso, dispatch]);
 
-    function agregarCarrito(id, nombre, precio, vendedor, imagen) {
-        setCarritoData((prev) => {
-            const existe = prev.find((item) => item.idCompra === id);
+    useEffect(() => () => dispatch(limpiarAviso()), [dispatch]);
 
-            if (existe) {
-                return prev.map((item) =>
-                    item.idCompra === id
-                        ? { ...item, cantidad: item.cantidad + 1 }
-                        : item,
-                );
-            }
-
-            return [
-                ...prev,
-                {
-                    idCompra: id,
-                    nombreCompra: nombre,
-                    precioCompra: precio,
-                    vendedorCompra: vendedor,
-                    imagenCompra: imagen,
-                    cantidad: 1,
-                },
-            ];
-        });
-    }
-
+    // Carga al entrar (o al cambiar la búsqueda) y limpia la lista al salir
     useEffect(() => {
-        let activo = true;
-        listarProductos(busqueda)
-            .then((data) => activo && setProductos(data))
-            .catch((err) => activo && setError(err))
-            .finally(() => setTimeout(() => activo && setCargando(false), 200));
+        dispatch(cargarProductos(busqueda));
         return () => {
-            activo = false;
+            dispatch(reiniciarProductos());
         };
-    }, [busqueda]);
+    }, [dispatch, busqueda]);
+
+    const onBuscar = useCallback(
+        (texto) => dispatch(buscarEnCatalogo(texto)),
+        [dispatch],
+    );
 
     return (
         <section className="Catalog-section">
@@ -96,10 +86,13 @@ export function Catalog({ busqueda, onBuscar, usuarioExiste }) {
                             price={p.precio.toFixed(2)}
                             seller={p.vendedor}
                             img={p.imagen}
-                            agregarCarrito={agregarCarrito}
-                            usuarioExiste={usuarioExiste}
                         />
                     ))}
+                </div>
+            )}
+            {aviso && (
+                <div className="Toast" role="status" aria-live="polite">
+                    {aviso.texto}
                 </div>
             )}
         </section>

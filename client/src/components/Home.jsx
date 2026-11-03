@@ -1,5 +1,8 @@
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { Info, Rat } from 'lucide-react';
+import { backgrounds } from '../data/backgrounds';
+import { irA, buscarEnCatalogo } from '../app/uiSlice';
 
 export function SearchBar({
     valorInicial = '',
@@ -47,9 +50,18 @@ export function SearchBar({
     );
 }
 
-export function Home({ bg, setBg, backgrounds, setPage, onBuscar }) {
+export function Home() {
+    const dispatch = useDispatch();
+    // El carrusel solo lo usa Home, así que su estado es local
+    const [bg, setBg] = useState(0);
     const intervalRef = useRef(null);
     const [isFocused, setIsFocused] = useState(false);
+
+    // SearchBar sigue recibiendo sus datos por props; Home le pasa la acción
+    const onBuscar = useCallback(
+        (texto) => dispatch(buscarEnCatalogo(texto)),
+        [dispatch],
+    );
 
     const resetInterval = () => {
         if (intervalRef.current) {
@@ -120,7 +132,7 @@ export function Home({ bg, setBg, backgrounds, setPage, onBuscar }) {
                 />
 
                 <div className="Buttons-welcome">
-                    <button onClick={() => setPage('catalog')}>
+                    <button onClick={() => dispatch(irA('catalog'))}>
                         Ver Catalogo
                     </button>
                 </div>
