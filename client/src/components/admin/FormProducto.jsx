@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useForm } from '../../hooks/useForm'
 
 const VACIO = { nombre: '', precio: '', imagen: '', id_vendedor: '' }
 
@@ -12,29 +12,19 @@ const datosIniciales = (p) =>
     : VACIO
 
 export function FormProducto({ producto, vendedores, onGuardar, onCancelar }) {
-    const [datos, setDatos] = useState(datosIniciales(producto))
-    const [enviando, setEnviando] = useState(false)
-
     const editando = Boolean(producto)
     const sinVendedores = !editando && vendedores.length === 0
 
-    const handleChange = (e) => {
-        const { name, value } = e.target
-        setDatos((prev) => ({ ...prev, [name]: value }))
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        setEnviando(true)
-
-    const aEnviar = editando
-        ? { nombre: datos.nombre, precio: datos.precio, imagen: datos.imagen }
-        : datos
-
-    const ok = await onGuardar(aEnviar)
-        setEnviando(false)
-        if (ok && !editando) setDatos(VACIO)
-    }
+    const { datos, handleChange, handleSubmit, enviando } = useForm(
+        datosIniciales(producto),
+        (d) =>
+            onGuardar(
+                editando
+                    ? { nombre: d.nombre, precio: d.precio, imagen: d.imagen }
+                    : d
+            ),
+        { limpiarSiExito: !editando }
+    )
 
   return (
     <form onSubmit={handleSubmit} className='Form-products-users'>

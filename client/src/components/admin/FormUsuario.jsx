@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useForm } from '../../hooks/useForm'
 import { esAdmin } from '../../utils/admin'
 
 const VACIO = {
@@ -22,26 +22,14 @@ const datosIniciales = (u) =>
     : VACIO
 
 export function FormUsuario({ usuario, onGuardar, onCancelar }) {
-  const [datos, setDatos] = useState(datosIniciales(usuario))
-  const [enviando, setEnviando] = useState(false)
-
   const editando = Boolean(usuario)
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setDatos((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setEnviando(true)
-    const ok = await onGuardar(datos)
-    setEnviando(false)
-    if (ok && !editando) setDatos(VACIO) // al crear, se limpia el formulario
-  }
+  // Al crear, el formulario se limpia cuando el guardado sale bien
+  const { datos, handleChange, handleSubmit, enviando } = useForm(
+    datosIniciales(usuario),
+    onGuardar,
+    { limpiarSiExito: !editando }
+  )
 
   return (
     <form onSubmit={handleSubmit} className='Form-products-users'>

@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Logo from '../assets/logo.webp';
-import { esAdmin } from '../utils/admin';
 import { ShoppingCart, LogOut, User, UserStar } from 'lucide-react';
-import { logout, selectUsuario } from '../app/authSlice';
+import { useAuth } from '../hooks/useAuth';
 import { irA, selectPage } from '../app/uiSlice';
 
 export function ButtonNav({ text, page, setPage, direction }) {
@@ -28,15 +27,12 @@ export function ButtonNav({ text, page, setPage, direction }) {
     );
 }
 
-// ButtonNav sigue siendo presentacional (recibe todo por props);
-// NavBar le entrega los datos que obtiene del store.
 export function NavBar() {
     const dispatch = useDispatch();
     const page = useSelector(selectPage);
-    const usuario = useSelector(selectUsuario);
+    const { usuario, esAdmin, esVendedor, cerrarSesion } = useAuth();
 
     const setPage = (destino) => dispatch(irA(destino));
-    const onLogout = () => dispatch(logout());
 
     return (
         <nav className="NavBar">
@@ -60,7 +56,7 @@ export function NavBar() {
                     direction="catalog"
                 />
                 <span className="NavSeparator"></span>
-                {esAdmin(usuario) && (
+                {esAdmin && (
                     <>
                         <ButtonNav
                             text={<UserStar />}
@@ -73,7 +69,7 @@ export function NavBar() {
                 )}
                 {usuario ? (
                     <>
-                        {usuario.es_vendedor ? (
+                        {esVendedor ? (
                             <ButtonNav
                                 text={
                                     <span className="usuario-view">
@@ -97,7 +93,7 @@ export function NavBar() {
                             direction="carrito"
                         />
                         <span className="NavSeparator"></span>
-                        <button className="ButtonNav" onClick={onLogout}>
+                        <button className="ButtonNav" onClick={cerrarSesion}>
                             <LogOut />
                         </button>
                     </>

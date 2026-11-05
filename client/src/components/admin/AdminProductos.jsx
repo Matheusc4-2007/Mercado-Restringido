@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useCargaLista } from '../../hooks/useCargaLista'
+import { useCrud } from '../../hooks/useCrud'
 import {
   cargarProductos,
   crearProducto,
@@ -36,30 +38,21 @@ export function AdminProductos() {
   const errorUsuarios = useSelector(selectUsuariosError)
   const error = errorProductos ?? errorUsuarios
 
-  const [idEditando, setIdEditando] = useState(null)
   const [busqueda, setBusqueda] = useState('') // lo que se escribe en el input
 
-  // Carga productos y vendedores al entrar y limpia ambas listas al salir
-  useEffect(() => {
-    dispatch(cargarProductos())
-    dispatch(cargarUsuarios())
-    return () => {
-      dispatch(reiniciarProductos())
-      dispatch(reiniciarUsuarios())
-    }
-  }, [dispatch])
+  useCargaLista(cargarProductos, reiniciarProductos)
+  useCargaLista(cargarUsuarios, reiniciarUsuarios)
 
-  const editando = productos.find((p) => p.id === idEditando)
-
-  const editar = (id) => {
-    dispatch(limpiarErrorProductos())
-    setIdEditando(id)
-  }
-
-  const cancelar = () => {
-    dispatch(limpiarErrorProductos())
-    setIdEditando(null)
-  }
+  const { idEditando, editando, editar, cancelar, guardar, eliminar } = useCrud(
+    productos,
+    {
+      crear: crearProducto,
+      actualizar: actualizarProducto,
+      eliminar: eliminarProducto,
+      limpiarError: limpiarErrorProductos,
+    },
+    (producto) => `¿Eliminar "${producto.nombre}"?`
+  )
 
   const buscar = (e) => {
     e.preventDefault()
@@ -71,24 +64,6 @@ export function AdminProductos() {
     dispatch(cargarProductos(''))
   }
 
-  const guardar = async (datos) => {
-    const accion = editando
-      ? actualizarProducto({ id: editando.id, datos })
-      : crearProducto(datos)
-    const res = await dispatch(accion)
-    const ok = res.meta.requestStatus === 'fulfilled'
-    if (ok) setIdEditando(null)
-    return ok
-  }
-
-  const eliminar = async (producto) => {
-    if (!window.confirm(`¿Eliminar "${producto.nombre}"?`)) return
-    const res = await dispatch(eliminarProducto(producto.id))
-    if (res.meta.requestStatus === 'fulfilled' && producto.id === idEditando) {
-      setIdEditando(null)
-    }
-  }
-  
   return (
     <div>
       <h2>Productos</h2>

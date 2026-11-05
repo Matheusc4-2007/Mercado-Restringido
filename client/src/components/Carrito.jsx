@@ -1,14 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { eliminarItem, selectCarrito, selectTotalCarrito } from '../app/carritoSlice';
+import { useCarrito } from '../hooks/useCarrito';
 
 export function Carrito() {
-    const dispatch = useDispatch();
-    const carrito = useSelector(selectCarrito);
-    const totalCarrito = useSelector(selectTotalCarrito);
-
-    function eliminarCarrito(id) {
-        dispatch(eliminarItem(id));
-    }
+    const { items: carrito, total: totalCarrito, quitar: eliminarCarrito } = useCarrito();
 
     return (
         <section className="Carrito-section">
@@ -74,3 +67,4 @@ export function Carrito() {
         </section>
     );
 }
+

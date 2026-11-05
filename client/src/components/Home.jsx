@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Info, Rat } from 'lucide-react';
 import { backgrounds } from '../data/backgrounds';
+import { useDebounce } from '../hooks/useDebounce';
 import { irA, buscarEnCatalogo } from '../app/uiSlice';
 
 export function SearchBar({
@@ -12,21 +13,22 @@ export function SearchBar({
     delay = 800,
 }) {
     const [texto, setTexto] = useState(valorInicial);
+    const textoEspera = useDebounce(texto, delay);
 
-    useEffect(() => {
+    const [valorPrevio, setValorPrevio] = useState(valorInicial);
+    if (valorInicial !== valorPrevio) {
+        setValorPrevio(valorInicial);
         setTexto(valorInicial);
-    }, [valorInicial]);
+    }
 
+    // Busca solo cuando el usuario dejó de escribir (texto ya "asentado")
     useEffect(() => {
-        if (texto === valorInicial) return;
-        if (texto.trim().length > 0 && texto.trim().length < 2) return;
+        if (texto !== textoEspera) return;
+        if (textoEspera === valorInicial) return;
+        if (textoEspera.trim().length > 0 && textoEspera.trim().length < 2) return;
 
-        const timer = setTimeout(() => {
-            onBuscar?.(texto.trim());
-        }, delay);
-
-        return () => clearTimeout(timer);
-    }, [texto, delay, onBuscar, valorInicial]);
+        onBuscar?.(textoEspera.trim());
+    }, [texto, textoEspera, valorInicial, onBuscar]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

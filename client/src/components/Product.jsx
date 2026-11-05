@@ -1,7 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux';
 import question from '../assets/undefined-product.png';
-import { selectUsuario } from '../app/authSlice';
-import { agregarAlCarrito } from '../app/carritoSlice';
+import { useAuth } from '../hooks/useAuth';
+import { useCarrito } from '../hooks/useCarrito';
+
 
 export function Product({
     id,
@@ -10,19 +10,17 @@ export function Product({
     seller = 'Default',
     img = question,
 }) {
-    const dispatch = useDispatch();
-    const usuarioExiste = useSelector(selectUsuario);
+    const { estaLogueado } = useAuth();
+    const { agregar: agregarAlCarrito } = useCarrito();
 
     const agregar = () =>
-        dispatch(
-            agregarAlCarrito({
-                idCompra: id,
-                nombreCompra: name,
-                precioCompra: price,
-                vendedorCompra: seller,
-                imagenCompra: img,
-            }),
-        );
+        agregarAlCarrito({
+            idCompra: id,
+            nombreCompra: name,
+            precioCompra: price,
+            vendedorCompra: seller,
+            imagenCompra: img,
+        });
 
     return (
         <div className="Product-card">
@@ -41,8 +39,8 @@ export function Product({
             <p className="Price">{price}$</p>
             <p className="Seller">Vendedor: {seller}</p>
             <button
-                className={usuarioExiste ? 'Agg-cart' : 'Agg-cart-disabled'}
-                disabled={!usuarioExiste}
+                className={estaLogueado ? 'Agg-cart' : 'Agg-cart-disabled'}
+                disabled={!estaLogueado}
                 onClick={agregar}
             >
                 Agregar Al Carrito

@@ -4,7 +4,8 @@ import { SearchBar } from './Home';
 import { Product } from './Product';
 import { MensajeError } from './admin/MensajeError';
 import loading from '../assets/loading-icon.svg';
-import { selectUsuario } from '../app/authSlice'
+import { useAuth } from '../hooks/useAuth';
+import { useCargaLista } from '../hooks/useCargaLista';
 import { selectBusqueda, selectAviso, buscarEnCatalogo, limpiarAviso } from '../app/uiSlice';
 import {
     cargarProductos,
@@ -17,13 +18,12 @@ import {
 export function Catalog() {
     const dispatch = useDispatch();
     const busqueda = useSelector(selectBusqueda);
-    const usuarioExiste = useSelector(selectUsuario);
+    const { estaLogueado } = useAuth();
     const productos = useSelector(selectProductos);
     const cargando = useSelector(selectProductosCargando);
     const error = useSelector(selectProductosError);
     const aviso = useSelector(selectAviso);
 
-    // El aviso se oculta solo a los 2.5 s y no se arrastra a otras vistas
     useEffect(() => {
         if (!aviso) return;
         const t = setTimeout(() => dispatch(limpiarAviso()), 2500);
@@ -33,12 +33,7 @@ export function Catalog() {
     useEffect(() => () => dispatch(limpiarAviso()), [dispatch]);
 
     // Carga al entrar (o al cambiar la búsqueda) y limpia la lista al salir
-    useEffect(() => {
-        dispatch(cargarProductos(busqueda));
-        return () => {
-            dispatch(reiniciarProductos());
-        };
-    }, [dispatch, busqueda]);
+    useCargaLista(cargarProductos, reiniciarProductos, busqueda);
 
     const onBuscar = useCallback(
         (texto) => dispatch(buscarEnCatalogo(texto)),
@@ -47,7 +42,7 @@ export function Catalog() {
 
     return (
         <section className="Catalog-section">
-            {!usuarioExiste ? (
+            {!estaLogueado ? (
                 <div className="info-catalogo-cuenta">
                     <p>
                         Si desea realizar alguna compra le recomendamos Crear

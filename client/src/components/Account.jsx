@@ -1,8 +1,10 @@
 import { DashBoard } from './DashBoard';
 import { TablaProductos } from './admin/TablaProductos';
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectUsuario } from '../app/authSlice'
+import { useSelector } from 'react-redux'
+import { useAuth } from '../hooks/useAuth'
+import { useForm } from '../hooks/useForm'
+import { useCrud } from '../hooks/useCrud'
+import { useCargaLista } from '../hooks/useCargaLista'
 import {
   cargarProductos,
   crearProducto,
@@ -16,40 +18,25 @@ import {
 } from '../app/productosSlice'
 
 export function FormProducto({ producto, vendedores = [], userId, onGuardar, onCancelar }) {
-  const VACIO = { nombre: '', precio: '', imagen: '', id_vendedor: userId || '' }
-
-  const datosIniciales = (p) =>
-    p
-      ? {
-          nombre: p.nombre,
-          precio: String(p.precio),
-          imagen: p.imagen,
-          id_vendedor: p.id_vendedor,
-        }
-      : VACIO
-
-  const [datos, setDatos] = useState(datosIniciales(producto))
-  const [enviando, setEnviando] = useState(false)
-
   const editando = Boolean(producto)
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setDatos((prev) => ({ ...prev, [name]: value }))
-  }
+  const valoresIniciales = producto
+    ? {
+        nombre: producto.nombre,
+        precio: String(producto.precio),
+        imagen: producto.imagen,
+        id_vendedor: producto.id_vendedor,
+      }
+    : { nombre: '', precio: '', imagen: '', id_vendedor: userId || '' }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setEnviando(true)
-
-    const aEnviar = editando
-      ? { nombre: datos.nombre, precio: datos.precio, imagen: datos.imagen }
-      : datos
-
-    const ok = await onGuardar(aEnviar)
-    setEnviando(false)
-    if (ok && !editando) setDatos(VACIO)
-  }
+  const { datos, handleChange, handleSubmit, enviando } = useForm(
+    valoresIniciales,
+    (d) =>
+      onGuardar(
+        editando ? { nombre: d.nombre, precio: d.precio, imagen: d.imagen } : d
+      ),
+    { limpiarSiExito: !editando }
+  )
 
   return (
     <form onSubmit={handleSubmit} className="Form-products-users">
@@ -120,53 +107,26 @@ export function FormProducto({ producto, vendedores = [], userId, onGuardar, onC
 }
 
 export function Account() {
-  const dispatch = useDispatch()
-  const user = useSelector(selectUsuario)
+  const { usuario: user } = useAuth()
   const products = useSelector((state) => selectProductosDeVendedor(state, user.id))
   const cargando = useSelector(selectProductosCargando)
   const error = useSelector(selectProductosError)
 
   const name = user.nombre
-  const [idEditando, setIdEditando] = useState(null)
 
   // Carga la lista al entrar y la limpia al salir
-  useEffect(() => {
-    dispatch(cargarProductos())
-    return () => {
-      dispatch(reiniciarProductos())
-    }
-  }, [dispatch])
+  useCargaLista(cargarProductos, reiniciarProductos)
 
-  const editando = products.find((p) => p.id === idEditando)
-
-  const editar = (id) => {
-    dispatch(limpiarErrorProductos())
-    setIdEditando(id)
-  }
-
-  const cancelar = () => {
-    dispatch(limpiarErrorProductos())
-    setIdEditando(null)
-  }
-
-  // Devuelve true si salió bien (el formulario lo usa para limpiarse)
-  const guardar = async (datos) => {
-    const accion = editando
-      ? actualizarProducto({ id: editando.id, datos })
-      : crearProducto(datos)
-    const res = await dispatch(accion)
-    const ok = res.meta.requestStatus === 'fulfilled'
-    if (ok) setIdEditando(null)
-    return ok
-  }
-
-  const eliminar = async (producto) => {
-    if (!window.confirm(`¿Eliminar "${producto.nombre}"?`)) return
-    const res = await dispatch(eliminarProducto(producto.id))
-    if (res.meta.requestStatus === 'fulfilled' && producto.id === idEditando) {
-      setIdEditando(null)
-    }
-  }
+  const { idEditando, editando, editar, cancelar, guardar, eliminar } = useCrud(
+    products,
+    {
+      crear: crearProducto,
+      actualizar: actualizarProducto,
+      eliminar: eliminarProducto,
+      limpiarError: limpiarErrorProductos,
+    },
+    (producto) => `¿Eliminar "${producto.nombre}"?`
+  )
 
   return (
     <section className="Account-container">

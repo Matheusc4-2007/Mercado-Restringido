@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  iniciarSesion,
-  registrarse,
-  limpiarErrorAuth,
-  selectAuthCargando,
-  selectAuthError,
-} from '../app/authSlice';
+import { useAuth } from '../hooks/useAuth';
+import { useForm } from '../hooks/useForm';
 
 const FORM_INICIAL = {
   cedula: '',
@@ -17,35 +11,22 @@ const FORM_INICIAL = {
 }
 
 export function FormLog() {
-  const dispatch = useDispatch()
-  const cargando = useSelector(selectAuthCargando)
-  const error = useSelector(selectAuthError)
-
+  const { cargando, error, iniciarSesion, registrarse, limpiarError } = useAuth()
   const [isLogin, setIsLogin] = useState(true);
-  const [datos, setDatos] = useState(FORM_INICIAL)
 
-  // Al entrar al formulario no debe verse un error de un intento anterior
+  // Si sale bien, el store guarda al usuario y uiSlice cambia de página
+  const { datos, handleChange, handleSubmit } = useForm(FORM_INICIAL, (datos) =>
+    isLogin ? iniciarSesion(datos.cedula) : registrarse(datos)
+  )
+
+  
   useEffect(() => {
-    dispatch(limpiarErrorAuth())
-  }, [dispatch])
+    limpiarError()
+  }, [limpiarError])
 
   const cambiarModo = (login) => {
     setIsLogin(login)
-    dispatch(limpiarErrorAuth())
-  }
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setDatos((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-  }
-
-  // Si sale bien, el store guarda al usuario y uiSlice cambia de página
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    dispatch(isLogin ? iniciarSesion(datos.cedula) : registrarse(datos))
+    limpiarError()
   }
 
   return (
