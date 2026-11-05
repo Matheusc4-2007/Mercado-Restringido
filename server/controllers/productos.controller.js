@@ -1,9 +1,12 @@
 import Productos from '../models/productos.model.js'
 import ErrorApi from '../utils/ErrorApi.js'
 import Usuarios from '../models/usuarios.model.js'
+import Categorias from '../models/categorias.model.js'
 import { validate as uuidValido } from 'uuid'
 
 const PRECIO_MAXIMO = 99999999.99
+const DESCRIPCION_MIN = 10
+const DESCRIPCION_MAX = 1000
 
 const validadores = {
     nombre(v) {
@@ -11,6 +14,16 @@ const validadores = {
         const limpio = v.trim().replace(/\s+/g, ' ')
         if (limpio.length < 2 || limpio.length > 100)
             return { error: 'El nombre debe tener entre 2 y 100 caracteres' }
+        return { valor: limpio }
+    },
+
+    descripcion(v) {
+        if (typeof v !== 'string') return { error: 'La descripción debe ser texto' }
+        const limpio = v.trim()
+        if (limpio.length < DESCRIPCION_MIN || limpio.length > DESCRIPCION_MAX)
+            return {
+                error: `La descripción debe tener entre ${DESCRIPCION_MIN} y ${DESCRIPCION_MAX} caracteres`,
+            }
         return { valor: limpio }
     },
 
@@ -51,10 +64,16 @@ const validadores = {
             return { error: 'El id_vendedor debe ser un UUID válido' }
         return { valor: v }
     },
+
+    id_categoria(v) {
+        if (typeof v !== 'string' || !uuidValido(v))
+            return { error: 'El id_categoria debe ser un UUID válido' }
+        return { valor: v }
+    },
 }
 
-const CAMPOS_CREAR = ['nombre', 'precio', 'imagen', 'id_vendedor']
-const CAMPOS_ACTUALIZAR = ['nombre', 'precio', 'imagen']
+const CAMPOS_CREAR = ['nombre', 'descripcion', 'precio', 'imagen', 'id_vendedor', 'id_categoria']
+const CAMPOS_ACTUALIZAR = ['nombre', 'descripcion', 'precio', 'imagen', 'id_categoria']
 
 const validarDatos = (body, { parcial }) => {
     if (!body || typeof body !== 'object' || Array.isArray(body))
@@ -94,10 +113,38 @@ const aRespuesta = (producto) =>
 const noEncontrado = (id) =>
     new ErrorApi(404, 'Producto no encontrado', `No existe un producto con el id ${id}`)
 
+const categoriaNoEncontrada = (id) =>
+    new ErrorApi(404, 'Categoría no encontrada', `No existe una categoría con el id ${id}`)
+
+// Comprueba que la categoría exista antes de guardar
+const exigirCategoria = async (idCategoria) => {
+    if (!(await Categorias.buscarId(idCategoria))) throw categoriaNoEncontrada(idCategoria)
+}
+
+const traducirErrorCategoria = (e, idCategoria) => {
+    if (e.code === 'ER_NO_REFERENCED_ROW_2' && idCategoria) throw categoriaNoEncontrada(idCategoria)
+    throw e
+}
+
 
 class ProductosController {
-    static async todos() {
-        const productos = await Productos.todos()
+    static async listar({ nombre, categoria } = {}) {
+        const filtros = {}
+
+        if (nombre !== undefined) {
+            const v = validadores.nombre(nombre)
+            if (v.error) throw new ErrorApi(400, 'Búsqueda inválida', v.error)
+            filtros.nombre = v.valor
+        }
+
+        if (categoria !== undefined) {
+            const v = validadores.id_categoria(categoria)
+            if (v.error) throw new ErrorApi(400, 'Filtro inválido', v.error)
+            await exigirCategoria(v.valor)
+            filtros.idCategoria = v.valor
+        }
+
+        const productos = await Productos.listar(filtros)
         return productos.map(aRespuesta)
     }
 
@@ -129,7 +176,13 @@ class ProductosController {
         if (!vendedor.es_vendedor)
             throw new ErrorApi(403, 'Acción no permitida', 'El usuario no es vendedor')
 
-        return aRespuesta(await Productos.crear(datos))
+        await exigirCategoria(datos.id_categoria)
+
+        try {
+            return aRespuesta(await Productos.crear(datos))
+        } catch (e) {
+            traducirErrorCategoria(e, datos.id_categoria)
+        }
     }
 
     static async actualizar(id, body) {
@@ -139,7 +192,13 @@ class ProductosController {
         const existente = await Productos.buscarId(id)
         if (!existente) throw noEncontrado(id)
 
-        return aRespuesta(await Productos.actualizar(id, datos))
+        if (datos.id_categoria) await exigirCategoria(datos.id_categoria)
+
+        try {
+            return aRespuesta(await Productos.actualizar(id, datos))
+        } catch (e) {
+            traducirErrorCategoria(e, datos.id_categoria)
+        }
     }
 
     static async eliminar(id) {
@@ -149,14 +208,6 @@ class ProductosController {
         if (!existente) throw noEncontrado(id)
 
         return aRespuesta(await Productos.eliminar(id))
-    }
-
-    static async buscarNombre(texto) {
-        const v = validadores.nombre(texto)
-        if (v.error) throw new ErrorApi(400, 'Búsqueda inválida', v.error)
-
-        const productos = await Productos.buscarNombre(v.valor)
-        return productos.map(aRespuesta)
     }
 }
 

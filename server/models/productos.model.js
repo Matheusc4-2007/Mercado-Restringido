@@ -9,17 +9,34 @@ const errorDB = (mensaje, error) => {
 
 // Columnas que se devuelven siempre, una vez tienes la base es rapido
 const SELECT_PRODUCTO = `
-    SELECT p.id, p.nombre, p.precio, p.imagen, p.id_vendedor,
-           CONCAT(u.nombre, ' ', u.apellido) AS vendedor
+    SELECT p.id, p.nombre, p.descripcion, p.precio, p.imagen,
+           p.id_vendedor, CONCAT(u.nombre, ' ', u.apellido) AS vendedor,
+           p.id_categoria, c.nombre AS categoria
     FROM productos p
     JOIN usuarios u ON u.id = p.id_vendedor
+    JOIN categorias c ON c.id = p.id_categoria
 `
 
 class Productos {
-    static async todos() {
+    static async listar({ nombre, idCategoria } = {}) {
         try {
+            const condiciones = []
+            const params = []
+
+            if (nombre !== undefined) {
+                // Escapa \ % _ para que se busquen como texto literal
+                condiciones.push('p.nombre LIKE ?')
+                params.push(`%${nombre.replace(/[\\%_]/g, '\\$&')}%`)
+            }
+            if (idCategoria !== undefined) {
+                condiciones.push('p.id_categoria = ?')
+                params.push(idCategoria)
+            }
+
+            const where = condiciones.length ? `WHERE ${condiciones.join(' AND ')}` : ''
             const [rows] = await connection.query(
-                `${SELECT_PRODUCTO} ORDER BY p.nombre ASC`
+                `${SELECT_PRODUCTO} ${where} ORDER BY p.nombre ASC`,
+                params
             )
             return rows
         } catch (error) {
@@ -56,8 +73,10 @@ class Productos {
             const nuevoProductoDB = {
                 id: uuidv4(),
                 nombre: productoData.nombre,
+                descripcion: productoData.descripcion,
                 precio: productoData.precio,
                 id_vendedor: productoData.id_vendedor,
+                id_categoria: productoData.id_categoria,
                 imagen: productoData.imagen,
             }
 
@@ -76,10 +95,14 @@ class Productos {
 
             if (productoData.nombre !== undefined)
                 camposActualizados.nombre = productoData.nombre
+            if (productoData.descripcion !== undefined)
+                camposActualizados.descripcion = productoData.descripcion
             if (productoData.precio !== undefined)
                 camposActualizados.precio = productoData.precio
             if (productoData.imagen !== undefined)
                 camposActualizados.imagen = productoData.imagen
+            if (productoData.id_categoria !== undefined)
+                camposActualizados.id_categoria = productoData.id_categoria
 
             if (Object.keys(camposActualizados).length === 0) return null
 
@@ -101,20 +124,6 @@ class Productos {
             return producto // devuelve lo eliminado (o null si no existía)
         } catch (error) {
             throw errorDB('Error al eliminar producto', error)
-        }
-    }
-
-    static async buscarNombre(texto) {
-        try {
-            // Escapa \ % _ para que se busquen como texto literal
-            const patron = `%${texto.replace(/[\\%_]/g, '\\$&')}%`
-            const [rows] = await connection.query(
-                `${SELECT_PRODUCTO} WHERE p.nombre LIKE ? ORDER BY p.nombre ASC`,
-                [patron]
-            )
-            return rows
-        } catch (error) {
-            throw errorDB('Error al buscar productos por nombre', error)
         }
     }
 }

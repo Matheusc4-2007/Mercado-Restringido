@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import usuariosRouter from './routes/usuarios.route.js';
 import productosRouter from './routes/productos.route.js';
+import categoriasRouter from './routes/categorias.route.js';
 import morgan from 'morgan';
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(morgan('dev'));
 
 app.use('/api/usuario', usuariosRouter);
 app.use('/api/producto', productosRouter);
+app.use('/api/categoria', categoriasRouter);
 
 app.use((req, res) => {
     res.status(404).json({

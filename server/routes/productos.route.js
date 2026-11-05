@@ -14,12 +14,8 @@ const responderError = (res, e) => {
 
 router.get('/', async (req, res) => {
     try {
-        const { nombre } = req.query
-        res.json(
-            nombre !== undefined
-                ? await control.buscarNombre(nombre)
-                : await control.todos()
-        )
+        const { nombre, categoria } = req.query
+        res.json(await control.listar({ nombre, categoria }))
     } catch (e) {
         responderError(res, e)
     }
@@ -60,19 +56,6 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         res.json(await control.eliminar(req.params.id))
-    } catch (e) {
-        responderError(res, e)
-    }
-})
-
-router.get('/', async (req, res) => {
-    try {
-        const { nombre } = req.query
-        res.json(
-            nombre !== undefined
-                ? await control.buscarNombre(nombre)
-                : await control.todos()
-        )
     } catch (e) {
         responderError(res, e)
     }
