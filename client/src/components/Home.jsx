@@ -54,12 +54,10 @@ export function SearchBar({
 
 export function Home() {
     const dispatch = useDispatch();
-    // El carrusel solo lo usa Home, así que su estado es local
     const [bg, setBg] = useState(0);
     const intervalRef = useRef(null);
     const [isFocused, setIsFocused] = useState(false);
 
-    // SearchBar sigue recibiendo sus datos por props; Home le pasa la acción
     const onBuscar = useCallback(
         (texto) => dispatch(buscarEnCatalogo(texto)),
         [dispatch],
@@ -77,17 +75,6 @@ export function Home() {
             }, 8000);
         }
     };
-
-    /*
-    const handleNext = () => {
-        setBg((prev) => (prev === backgrounds.length - 1 ? 0 : prev + 1));
-        resetInterval();
-    };
-
-    const handlePrev = () => {
-        setBg((prev) => (prev === 0 ? backgrounds.length - 1 : prev - 1));
-        resetInterval();
-    }; */
 
     useEffect(() => {
         if (isFocused) {

@@ -93,7 +93,7 @@ export function FormProducto({ producto, vendedores = [], userId, onGuardar, onC
         </>
       )}
 
-      <button type="submit" disabled={enviando}>
+      <button type="submit" className='button-jodedor' disabled={enviando}>
         {enviando ? 'Guardando...' : editando ? 'Guardar cambios' : 'Crear producto'}
       </button>
 
