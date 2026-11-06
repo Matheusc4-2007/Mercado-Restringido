@@ -1,0 +1,87 @@
+/* Estilos de categorías y descripción (se cargan después de App.css y Admin.css) */
+/* ---- Categorías y descripción (campo de texto largo del formulario y de la tarjeta) ---- */
+.Form-products-users textarea {
+    grid-column: 1 / -1;
+    background: var(--border-default);
+    border: 2px solid transparent;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    width: 100%;
+    min-height: 96px;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: all 0.25s ease;
+}
+
+.Form-products-users textarea:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(88, 24, 166, 0.1);
+}
+
+.Product-card {
+    height: 490px;
+}
+
+.Product-card > .Category {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--brand-primary);
+}
+
+.Product-card > .Description {
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+    width: 100%;
+    margin: 4px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.Product-card > .Description.empty {
+    font-style: italic;
+    opacity: 0.6;
+}
+
+/* ---- Filtro por categoría del catálogo ---- */
+.Category-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.Category-filter select {
+    background: var(--border-default);
+    border: 2px solid transparent;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.Category-filter select:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(88, 24, 166, 0.1);
+}
+
+.Form-products-users > textarea,
+.Form-products-users > select {
+  padding: 10px;
+  width: 90%;
+  box-sizing: border-box;
+}

@@ -2,26 +2,34 @@ import { createSlice, isAnyOf } from '@reduxjs/toolkit'
 import { esAdmin } from '../utils/admin'
 import { iniciarSesion, registrarse, logout } from './authSlice'
 
-// Navegación (la app no usa react router) y aviso global tipo "toast"
 const initialState = {
   page: 'home',
   busqueda: '',
-  aviso: null, // { texto }
+  categoria: '', // id de la categoría filtrada en el catálogo ('' = todas)
+  aviso: null, 
 }
 
 const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    // Cambia de página; al entrar al catálogo desde fuera se limpia la búsqueda
     irA: (state, action) => {
-      if (action.payload === 'catalog') state.busqueda = ''
+      if (action.payload === 'catalog') {
+        state.busqueda = ''
+        state.categoria = ''
+      }
       state.page = action.payload
     },
-    // Busca y lleva al catálogo
+    // Busca y lleva al catálogo. Si ya estás en el catálogo se conserva la
+    // categoría elegida (buscar dentro de ella); si vienes de otra página, no.
     buscarEnCatalogo: (state, action) => {
+      if (state.page !== 'catalog') state.categoria = ''
       state.busqueda = action.payload
       state.page = 'catalog'
+    },
+    // Filtra el catálogo por categoría ('' = todas)
+    filtrarPorCategoria: (state, action) => {
+      state.categoria = action.payload
     },
     mostrarAviso: (state, action) => {
       state.aviso = { texto: action.payload }
@@ -36,7 +44,6 @@ const uiSlice = createSlice({
         state.page = 'home'
         state.aviso = null
       })
-      // Tras entrar: el admin va a su panel y el resto al inicio
       .addMatcher(
         isAnyOf(iniciarSesion.fulfilled, registrarse.fulfilled),
         (state, action) => {
@@ -46,9 +53,10 @@ const uiSlice = createSlice({
   },
 })
 
-export const { irA, buscarEnCatalogo, mostrarAviso, limpiarAviso } = uiSlice.actions
+export const { irA, buscarEnCatalogo, filtrarPorCategoria, mostrarAviso, limpiarAviso } = uiSlice.actions
 export default uiSlice.reducer
 
 export const selectPage = (state) => state.ui.page
 export const selectBusqueda = (state) => state.ui.busqueda
+export const selectCategoriaFiltro = (state) => state.ui.categoria
 export const selectAviso = (state) => state.ui.aviso

@@ -6,23 +6,22 @@ import { conRechazo, errorDeAccion } from './utils'
 // del vendedor; cada vista la carga al montarse y la reinicia al salir.
 const initialState = {
   items: [],
-  filtro: '', // búsqueda por nombre aplicada a la lista actual
+  filtro: { nombre: '', idCategoria: '' }, // filtros aplicados a la lista actual
   cargado: false, // true cuando terminó la primera carga (éxito o error)
   error: null,
   requestId: null, // última carga pedida, para descartar respuestas viejas
 }
 
-// Con texto filtra por nombre, sin texto trae todos
 export const cargarProductos = createAsyncThunk(
   'productos/cargar',
-  conRechazo(async (nombre = '') => ({
-    items: await api.listarProductos(nombre),
-    filtro: nombre,
+  conRechazo(async ({ nombre = '', idCategoria = '' } = {}) => ({
+    items: await api.listarProductos({ nombre, idCategoria }),
+    filtro: { nombre, idCategoria },
   }))
 )
 
 // Crear, actualizar y eliminar terminan recargando la lista con el filtro
-// vigente: el servidor es la fuente de verdad (ids y nombre del vendedor).
+// vigente: el servidor es la fuente de verdad (ids, vendedor y categoría).
 const recargar = (getState) => api.listarProductos(getState().productos.filtro)
 
 export const crearProducto = createAsyncThunk(

@@ -21,6 +21,13 @@ import {
   selectUsuariosCargando,
   selectUsuariosError,
 } from '../../app/usuariosSlice'
+import {
+  cargarCategorias,
+  reiniciarCategorias,
+  selectCategorias,
+  selectCategoriasCargando,
+  selectCategoriasError,
+} from '../../app/categoriasSlice'
 import { MensajeError } from './MensajeError'
 import { FormProducto } from './FormProducto'
 import { TablaProductos } from './TablaProductos'
@@ -29,19 +36,24 @@ import loading from '../../assets/loading-icon.svg';
 export function AdminProductos() {
   const dispatch = useDispatch()
   const productos = useSelector(selectProductos)
-  const filtro = useSelector(selectFiltroProductos) // el filtro aplicado
+  const { nombre: filtro } = useSelector(selectFiltroProductos) // búsqueda aplicada
   const vendedores = useSelector(selectVendedores)
   const cargandoProductos = useSelector(selectProductosCargando)
   const cargandoUsuarios = useSelector(selectUsuariosCargando)
   const cargando = cargandoProductos || cargandoUsuarios
   const errorProductos = useSelector(selectProductosError)
   const errorUsuarios = useSelector(selectUsuariosError)
-  const error = errorProductos ?? errorUsuarios
+  const categorias = useSelector(selectCategorias)
+  const cargandoCategorias = useSelector(selectCategoriasCargando)
+  const errorCategorias = useSelector(selectCategoriasError)
+  const error = errorProductos ?? errorUsuarios ?? errorCategorias
 
   const [busqueda, setBusqueda] = useState('') // lo que se escribe en el input
 
+  // Carga productos y vendedores al entrar y limpia ambas listas al salir
   useCargaLista(cargarProductos, reiniciarProductos)
   useCargaLista(cargarUsuarios, reiniciarUsuarios)
+  useCargaLista(cargarCategorias, reiniciarCategorias)
 
   const { idEditando, editando, editar, cancelar, guardar, eliminar } = useCrud(
     productos,
@@ -56,12 +68,12 @@ export function AdminProductos() {
 
   const buscar = (e) => {
     e.preventDefault()
-    dispatch(cargarProductos(busqueda.trim()))
+    dispatch(cargarProductos({ nombre: busqueda.trim() }))
   }
 
   const limpiarBusqueda = () => {
     setBusqueda('')
-    dispatch(cargarProductos(''))
+    dispatch(cargarProductos())
   }
 
   return (
@@ -74,6 +86,8 @@ export function AdminProductos() {
         key={idEditando ?? 'nuevo'}
         producto={editando}
         vendedores={vendedores}
+        categorias={categorias}
+        cargandoCategorias={cargandoCategorias}
         onGuardar={guardar}
         onCancelar={cancelar}
       />

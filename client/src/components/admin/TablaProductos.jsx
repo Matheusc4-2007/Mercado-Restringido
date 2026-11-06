@@ -7,6 +7,7 @@ export function TablaProductos({ productos, onEditar, onEliminar }) {
         <tr>
           <th>Imagen</th>
           <th>Nombre</th>
+          <th>Categoría</th>
           <th>Precio</th>
           <th>Vendedor</th>
           <th>Acciones</th>
@@ -16,7 +17,8 @@ export function TablaProductos({ productos, onEditar, onEliminar }) {
         {productos.map((p) => (
           <tr key={p.id}>
             <td><img src={p.imagen} alt={p.nombre} width="60" /></td>
-            <td>{p.nombre}</td>
+            <td title={p.descripcion || undefined}>{p.nombre}</td>
+            <td>{p.categoria}</td>
             <td>{p.precio.toFixed(2)}</td>
             <td>{p.vendedor}</td>
             <td>
