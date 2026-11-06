@@ -2,13 +2,14 @@ import question from '../assets/undefined-product.png';
 import { useAuth } from '../hooks/useAuth';
 import { useCarrito } from '../hooks/useCarrito';
 
-
 export function Product({
     id,
     name = 'Product Name',
     price = '00.00',
     seller = 'Default',
     img = question,
+    category,
+    description,
 }) {
     const { estaLogueado } = useAuth();
     const { agregar: agregarAlCarrito } = useCarrito();
@@ -36,7 +37,11 @@ export function Product({
                 }}
             />
             <h4 className="Name">{name}</h4>
+            {category && <p className="Category">{category}</p>}
             <p className="Price">{price}$</p>
+            <p className={description ? 'Description' : 'Description empty'}>
+                {description || 'Sin descripción'}
+            </p>
             <p className="Seller">Vendedor: {seller}</p>
             <button
                 className={estaLogueado ? 'Agg-cart' : 'Agg-cart-disabled'}

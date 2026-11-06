@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchBar } from './Home';
 import { Product } from './Product';
@@ -6,7 +6,19 @@ import { MensajeError } from './admin/MensajeError';
 import loading from '../assets/loading-icon.svg';
 import { useAuth } from '../hooks/useAuth';
 import { useCargaLista } from '../hooks/useCargaLista';
-import { selectBusqueda, selectAviso, buscarEnCatalogo, limpiarAviso } from '../app/uiSlice';
+import {
+    selectBusqueda,
+    selectCategoriaFiltro,
+    selectAviso,
+    buscarEnCatalogo,
+    filtrarPorCategoria,
+    limpiarAviso,
+} from '../app/uiSlice';
+import {
+    cargarCategorias,
+    reiniciarCategorias,
+    selectCategorias,
+} from '../app/categoriasSlice';
 import {
     cargarProductos,
     reiniciarProductos,
@@ -18,12 +30,15 @@ import {
 export function Catalog() {
     const dispatch = useDispatch();
     const busqueda = useSelector(selectBusqueda);
+    const categoriaFiltro = useSelector(selectCategoriaFiltro);
+    const categorias = useSelector(selectCategorias);
     const { estaLogueado } = useAuth();
     const productos = useSelector(selectProductos);
     const cargando = useSelector(selectProductosCargando);
     const error = useSelector(selectProductosError);
     const aviso = useSelector(selectAviso);
 
+    // El aviso se oculta solo a los 2.5 s y no se arrastra a otras vistas
     useEffect(() => {
         if (!aviso) return;
         const t = setTimeout(() => dispatch(limpiarAviso()), 2500);
@@ -33,7 +48,15 @@ export function Catalog() {
     useEffect(() => () => dispatch(limpiarAviso()), [dispatch]);
 
     // Carga al entrar (o al cambiar la búsqueda) y limpia la lista al salir
-    useCargaLista(cargarProductos, reiniciarProductos, busqueda);
+    // useMemo mantiene la misma identidad del objeto entre renders: si se creara
+    // uno nuevo cada vez, el efecto de useCargaLista se repetiría sin parar
+    const filtros = useMemo(
+        () => ({ nombre: busqueda, idCategoria: categoriaFiltro }),
+        [busqueda, categoriaFiltro],
+    );
+    useCargaLista(cargarProductos, reiniciarProductos, filtros);
+    // Las categorías alimentan el selector de filtro
+    useCargaLista(cargarCategorias, reiniciarCategorias);
 
     const onBuscar = useCallback(
         (texto) => dispatch(buscarEnCatalogo(texto)),
@@ -53,6 +76,22 @@ export function Catalog() {
                 ''
             )}
             <SearchBar valorInicial={busqueda} onBuscar={onBuscar} />
+
+            <div className="Category-filter">
+                <label htmlFor="category-filter">Categoría</label>
+                <select
+                    id="category-filter"
+                    value={categoriaFiltro}
+                    onChange={(e) => dispatch(filtrarPorCategoria(e.target.value))}
+                >
+                    <option value="">Todas las categorías</option>
+                    {categorias.map((c) => (
+                        <option key={c.id} value={c.id}>
+                            {c.nombre}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             {busqueda && (
                 <p className="Result-text">Resultados para "{busqueda}"</p>
@@ -81,6 +120,8 @@ export function Catalog() {
                             price={p.precio.toFixed(2)}
                             seller={p.vendedor}
                             img={p.imagen}
+                            category={p.categoria}
+                            description={p.descripcion}
                         />
                     ))}
                 </div>

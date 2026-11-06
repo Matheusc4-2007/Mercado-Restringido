@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { AdminUsuarios } from './AdminUsuarios'
 import { AdminProductos } from './AdminProductos'
+import { AdminCategorias } from './AdminCategorias'
 import './Admin.css'
 
 const SECCIONES = [
   { id: 'usuarios', texto: 'Usuarios' },
   { id: 'productos', texto: 'Productos' },
+  { id: 'categorias', texto: 'Categorías' },
 ]
 
 export function AdminPanel() {
@@ -29,6 +31,7 @@ export function AdminPanel() {
       <div className="Admin-content">
         {seccion === 'usuarios' && <AdminUsuarios />}
         {seccion === 'productos' && <AdminProductos />}
+        {seccion === 'categorias' && <AdminCategorias />}
       </div>
     </section>
   )

@@ -3,9 +3,15 @@ import { peticion } from './api'
 const BASE = '/api/producto'
 const JSON_HEADERS = { 'Content-Type': 'application/json' }
 
-// Con texto filtra por nombre (?nombre=), sin texto trae todos
-export const listarProductos = (nombre) =>
-  peticion(nombre ? `${BASE}?nombre=${encodeURIComponent(nombre)}` : BASE)
+// Filtros opcionales y combinables: ?nombre= (texto) y ?categoria= (id).
+// Sin filtros trae todos.
+export const listarProductos = ({ nombre, idCategoria } = {}) => {
+  const params = new URLSearchParams()
+  if (nombre) params.set('nombre', nombre)
+  if (idCategoria) params.set('categoria', idCategoria)
+  const consulta = params.toString()
+  return peticion(consulta ? `${BASE}?${consulta}` : BASE)
+}
 
 export const crearProducto = (datos) =>
   peticion(BASE, {
