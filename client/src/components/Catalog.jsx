@@ -78,7 +78,7 @@ export function Catalog() {
             <SearchBar valorInicial={busqueda} onBuscar={onBuscar} />
 
             <div className="Category-filter">
-                <label htmlFor="category-filter">Categoría</label>
+                <label htmlFor="category-filter" className='label-x'>Categoría</label>
                 <select
                     id="category-filter"
                     value={categoriaFiltro}

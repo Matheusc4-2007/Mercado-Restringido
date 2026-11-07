@@ -1,6 +1,6 @@
 .Admin { 
   display: flex; 
-  min-height: 90vh; 
+  height: 89.4vh; 
   background: var(--bg-primary);
   font-family: 'Poppins', sans-serif;
 }
