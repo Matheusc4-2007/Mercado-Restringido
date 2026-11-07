@@ -36,3 +36,53 @@ cd Mercado-Restringido
 ```bash
 cd server
 npm install
+```
+
+Crea un archivo `.env` dentro de la carpeta `server` con este contenido:
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=MercadoRestringido
+```
+
+> Estos valores son los de XAMPP por defecto (usuario `root` sin contraseña). Si tu MySQL tiene otra configuración, ajústalos.
+
+Inicia el servidor:
+
+```bash
+node app.js
+```
+
+Debe mostrar: `Servidor corriendo en http://localhost:3000`
+
+### 4. Frontend
+
+En **otra terminal**:
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Abre `http://localhost:5173` en el navegador.
+
+> Vite redirige las peticiones `/api` a `http://localhost:3000`, así que el backend debe estar corriendo en ese puerto. Si cambias el `PORT`, ajusta `client/vite.config.js`.
+
+### Usuarios de prueba
+
+El inicio de sesión se hace solo con la cédula:
+
+| Cédula     | Rol           |
+|------------|---------------|
+| `0000000`  | Administrador |
+| `12345678` | Vendedor      |
+| `23456789` | Vendedor      |
+| `34567890` | Cliente       |
+
+### Comandos útiles (carpeta `client`)
+
+- `npm run build`: compila para produc
