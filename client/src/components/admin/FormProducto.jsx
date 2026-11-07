@@ -150,6 +150,7 @@ export function FormProducto({
       <button
         type="submit"
         disabled={enviando || sinVendedores || (!editando && sinCategorias)}
+        className='boton-x'
       >
         {enviando ? 'Guardando...' : editando ? 'Guardar cambios' : 'Crear producto'}
       </button>
