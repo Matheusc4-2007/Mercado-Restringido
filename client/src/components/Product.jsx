@@ -2,12 +2,15 @@ import { useState } from 'react';
 import question from '../assets/undefined-product.png';
 import { useAuth } from '../hooks/useAuth';
 import { useCarrito } from '../hooks/useCarrito';
+import { BotonFavorito } from './BotonFavorito';
+import { Resenas } from './Resenas';
 
 export function Product({
     id,
     name = 'Product Name',
     price = '00.00',
     seller = 'Default',
+    sellerId,
     img = question,
     category,
     description,
@@ -53,6 +56,7 @@ export function Product({
                     {description || 'Sin descripción'}
                 </p>
                 <p className="Seller">Vendedor: {seller}</p>
+                <BotonFavorito idProducto={id} />
                 <button
                     className={estaLogueado ? 'Agg-cart' : 'Agg-cart-disabled'}
                     disabled={!estaLogueado}
@@ -101,8 +105,11 @@ export function Product({
                                 >
                                     Agregar Al Carrito
                                 </button>
+                                <BotonFavorito idProducto={id} />
                             </div>
                         </div>
+
+                        <Resenas idProducto={id} idVendedor={sellerId} />
                     </div>
                 </div>
             )}

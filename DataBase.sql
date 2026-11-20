@@ -138,6 +138,82 @@ ALTER TABLE `usuarios`
 ALTER TABLE `productos`
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_vendedor`) REFERENCES `usuarios` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`) ON UPDATE CASCADE;
+-- --------------------------------------------------------
+-- Entidades nuevas: pedidos, detalle_pedido, resenas y favoritos
+-- --------------------------------------------------------
+
+CREATE TABLE `pedidos` (
+  `id` char(36) NOT NULL,
+  `id_comprador` char(36) NOT NULL,
+  `fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  `total` decimal(12,2) NOT NULL CHECK (`total` >= 0),
+  `estado` enum('pendiente','enviado','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
+  PRIMARY KEY (`id`),
+  KEY `id_comprador` (`id_comprador`),
+  CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`id_comprador`) REFERENCES `usuarios` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE `detalle_pedido` (
+  `id` char(36) NOT NULL,
+  `id_pedido` char(36) NOT NULL,
+  `id_producto` char(36) NOT NULL,
+  `cantidad` int(11) NOT NULL CHECK (`cantidad` > 0),
+  `precio_unitario` decimal(10,2) NOT NULL CHECK (`precio_unitario` >= 0),
+  PRIMARY KEY (`id`),
+  KEY `id_pedido` (`id_pedido`),
+  KEY `id_producto` (`id_producto`),
+  CONSTRAINT `detalle_pedido_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `detalle_pedido_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE `resenas` (
+  `id` char(36) NOT NULL,
+  `id_producto` char(36) NOT NULL,
+  `id_usuario` char(36) NOT NULL,
+  `calificacion` tinyint(4) NOT NULL CHECK (`calificacion` between 1 and 5),
+  `comentario` varchar(500) DEFAULT NULL,
+  `fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `producto_usuario` (`id_producto`,`id_usuario`),
+  KEY `id_usuario` (`id_usuario`),
+  CONSTRAINT `resenas_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `resenas_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE `favoritos` (
+  `id` char(36) NOT NULL,
+  `id_usuario` char(36) NOT NULL,
+  `id_producto` char(36) NOT NULL,
+  `fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `usuario_producto` (`id_usuario`,`id_producto`),
+  KEY `id_producto` (`id_producto`),
+  CONSTRAINT `favoritos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `favoritos_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+-- --------------------------------------------------------
+-- Datos de ejemplo de pedidos, reseñas y favoritos
+-- (usuario comprador: Laura Gómez, cédula 34567890)
+-- --------------------------------------------------------
+
+INSERT INTO `pedidos` (`id`, `id_comprador`, `fecha`, `total`, `estado`) VALUES
+('3987a420-ac18-4c07-9f09-7cc596ef14fd', '44bbaae4-d124-4408-a97e-a5e331995325', '2026-11-02 15:30:00', 868.00, 'entregado'),
+('b05395a6-687c-4ca6-ab02-85a66d35a9d9', '44bbaae4-d124-4408-a97e-a5e331995325', '2026-11-10 10:05:00', 24.99, 'pendiente');
+
+INSERT INTO `detalle_pedido` (`id`, `id_pedido`, `id_producto`, `cantidad`, `precio_unitario`) VALUES
+('e789f0e4-1241-4017-a9be-81e20631bcae', '3987a420-ac18-4c07-9f09-7cc596ef14fd', '6def5519-bb30-4c1d-90c7-17e3483d15d9', 1, 749.00),
+('5fd2cb09-c1e7-435b-a56d-64cb70f9d6b9', '3987a420-ac18-4c07-9f09-7cc596ef14fd', 'f5d44492-9872-43e3-9f97-ca2b68dd9b63', 2, 59.50),
+('9342a0fc-8e98-45bb-b820-c8d2655f4211', 'b05395a6-687c-4ca6-ab02-85a66d35a9d9', '688263a4-0e94-4028-b9ce-c7224ceafb51', 1, 24.99);
+
+INSERT INTO `resenas` (`id`, `id_producto`, `id_usuario`, `calificacion`, `comentario`, `fecha`) VALUES
+('79fe04f0-a64e-43b6-9be8-c7975f48824f', '6def5519-bb30-4c1d-90c7-17e3483d15d9', '44bbaae4-d124-4408-a97e-a5e331995325', 5, 'Muy rápida y llegó bien empacada.', '2026-11-05 18:00:00'),
+('5a4798d7-41e8-4d02-a13f-0d4dd2e53bc3', 'f5d44492-9872-43e3-9f97-ca2b68dd9b63', '44bbaae4-d124-4408-a97e-a5e331995325', 4, NULL, '2026-11-05 18:10:00');
+
+INSERT INTO `favoritos` (`id`, `id_usuario`, `id_producto`, `fecha`) VALUES
+('edff88f3-bc3b-4452-ba1f-a0518879fbc0', '44bbaae4-d124-4408-a97e-a5e331995325', '4e742003-de78-4042-a7b1-1c763e47207f', '2026-11-06 09:00:00'),
+('8114b1c1-744c-429f-9a37-95558ec116d8', '44bbaae4-d124-4408-a97e-a5e331995325', 'e210e331-7fac-4328-9386-37bde18c5712', '2026-11-06 09:05:00');
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

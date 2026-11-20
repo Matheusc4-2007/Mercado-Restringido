@@ -207,7 +207,13 @@ class ProductosController {
         const existente = await Productos.buscarId(id)
         if (!existente) throw noEncontrado(id)
 
-        return aRespuesta(await Productos.eliminar(id))
+        try {
+            return aRespuesta(await Productos.eliminar(id))
+        } catch (e) {
+            if (e.code === 'ER_ROW_IS_REFERENCED_2')
+                throw new ErrorApi(409, 'No se puede eliminar', 'El producto tiene pedidos asociados')
+            throw e
+        }
     }
 }
 

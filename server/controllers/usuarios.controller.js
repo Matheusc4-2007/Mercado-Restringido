@@ -188,7 +188,7 @@ class UsuariosController{
         }
         catch(e){ 
             if (e.code === 'ER_ROW_IS_REFERENCED_2')
-                throw new ErrorApi(409, 'No se puede eliminar', 'El usuario tiene productos publicados')
+                throw new ErrorApi(409, 'No se puede eliminar', 'El usuario tiene productos publicados o pedidos realizados')
             throw e
         }
     }

@@ -20,6 +20,10 @@ import {
     selectCategorias,
 } from '../app/categoriasSlice';
 import {
+    cargarFavoritos,
+    reiniciarFavoritos,
+} from '../app/favoritosSlice';
+import {
     cargarProductos,
     reiniciarProductos,
     selectProductos,
@@ -32,7 +36,7 @@ export function Catalog() {
     const busqueda = useSelector(selectBusqueda);
     const categoriaFiltro = useSelector(selectCategoriaFiltro);
     const categorias = useSelector(selectCategorias);
-    const { estaLogueado } = useAuth();
+    const { estaLogueado, usuario } = useAuth();
     const productos = useSelector(selectProductos);
     const cargando = useSelector(selectProductosCargando);
     const error = useSelector(selectProductosError);
@@ -57,6 +61,12 @@ export function Catalog() {
     useCargaLista(cargarProductos, reiniciarProductos, filtros);
     // Las categorías alimentan el selector de filtro
     useCargaLista(cargarCategorias, reiniciarCategorias);
+    // Los favoritos del usuario marcan el botón de cada producto (sin sesión: vacío)
+    const filtroFavoritos = useMemo(
+        () => ({ idUsuario: usuario?.id ?? '' }),
+        [usuario?.id],
+    );
+    useCargaLista(cargarFavoritos, reiniciarFavoritos, filtroFavoritos);
 
     const onBuscar = useCallback(
         (texto) => dispatch(buscarEnCatalogo(texto)),
@@ -119,6 +129,7 @@ export function Catalog() {
                             name={p.nombre}
                             price={p.precio.toFixed(2)}
                             seller={p.vendedor}
+                            sellerId={p.id_vendedor}
                             img={p.imagen}
                             category={p.categoria}
                             description={p.descripcion}

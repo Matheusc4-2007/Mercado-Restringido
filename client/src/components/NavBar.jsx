@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Logo from '../assets/logo.webp';
-import { ShoppingCart, LogOut, User, UserStar } from 'lucide-react';
+import { ShoppingCart, LogOut, User, UserStar, Heart, Package } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { irA, selectPage } from '../app/uiSlice';
 
@@ -86,6 +86,18 @@ export function NavBar() {
                             </span>
                         )}
 
+                        <ButtonNav
+                            text={<Heart />}
+                            page={page}
+                            setPage={setPage}
+                            direction="favoritos"
+                        />
+                        <ButtonNav
+                            text={<Package />}
+                            page={page}
+                            setPage={setPage}
+                            direction="pedidos"
+                        />
                         <ButtonNav
                             text={<ShoppingCart />}
                             page={page}

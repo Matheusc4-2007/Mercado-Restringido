@@ -5,6 +5,9 @@ import carritoReducer from './carritoSlice'
 import productosReducer from './productosSlice'
 import usuariosReducer from './usuariosSlice'
 import categoriasReducer from './categoriasSlice'
+import pedidosReducer from './pedidosSlice'
+import resenasReducer from './resenasSlice'
+import favoritosReducer from './favoritosSlice'
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +17,8 @@ export const store = configureStore({
     productos: productosReducer,
     usuarios: usuariosReducer,
     categorias: categoriasReducer,
+    pedidos: pedidosReducer,
+    resenas: resenasReducer,
+    favoritos: favoritosReducer,
   },
 })

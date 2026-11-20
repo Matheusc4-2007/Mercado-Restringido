@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import usuariosRouter from './routes/usuarios.route.js';
 import productosRouter from './routes/productos.route.js';
 import categoriasRouter from './routes/categorias.route.js';
+import pedidosRouter from './routes/pedidos.route.js';
+import resenasRouter from './routes/resenas.route.js';
+import favoritosRouter from './routes/favoritos.route.js';
 import morgan from 'morgan';
 
 dotenv.config();
@@ -19,6 +22,9 @@ app.use(morgan('dev'));
 app.use('/api/usuario', usuariosRouter);
 app.use('/api/producto', productosRouter);
 app.use('/api/categoria', categoriasRouter);
+app.use('/api/pedido', pedidosRouter);
+app.use('/api/resena', resenasRouter);
+app.use('/api/favorito', favoritosRouter);
 
 app.use((req, res) => {
     res.status(404).json({

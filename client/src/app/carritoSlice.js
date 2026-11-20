@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { logout } from './authSlice'
 import { mostrarAviso } from './uiSlice'
+import { crearPedido } from './pedidosSlice'
 
 // El carrito vive solo en memoria: se vacía al cerrar sesión
 // (igual que antes, que se limpiaba el localStorage).
@@ -24,7 +25,10 @@ const carritoSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(logout, () => initialState)
+    builder
+      .addCase(logout, () => initialState)
+      // Pedido creado con éxito: el carrito queda vacío
+      .addCase(crearPedido.fulfilled, () => initialState)
   },
 })
 

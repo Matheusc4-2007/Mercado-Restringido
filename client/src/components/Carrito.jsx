@@ -1,13 +1,42 @@
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAuth } from '../hooks/useAuth';
 import { useCarrito } from '../hooks/useCarrito';
+import { crearPedido, selectPedidosError } from '../app/pedidosSlice';
+import { irA } from '../app/uiSlice';
+import { MensajeError } from './admin/MensajeError';
 
 export function Carrito() {
+    const dispatch = useDispatch();
+    const { usuario } = useAuth();
     const { items: carrito, total: totalCarrito, quitar: eliminarCarrito } = useCarrito();
+    const error = useSelector(selectPedidosError);
+    const [comprando, setComprando] = useState(false);
+
+    // Envía el carrito como pedido. Si sale bien, el carrito se vacía solo
+    // (carritoSlice escucha crearPedido.fulfilled) y se va a "Mis pedidos".
+    const comprar = async () => {
+        setComprando(true);
+        const res = await dispatch(
+            crearPedido({
+                id_comprador: usuario.id,
+                items: carrito.map((i) => ({
+                    id_producto: i.idCompra,
+                    cantidad: i.cantidad,
+                })),
+            }),
+        );
+        setComprando(false);
+        if (res.meta.requestStatus === 'fulfilled') dispatch(irA('pedidos'));
+    };
 
     return (
         <section className="Carrito-section">
             <p className="Carrito-text">
                 Su carrito se ve así... ¿No quiere comprar más?
             </p>
+
+            <MensajeError error={error} />
 
             <article className="Container-carrito-elems">
                 {carrito.length > 0
@@ -57,7 +86,13 @@ export function Carrito() {
                                     {totalCarrito.toFixed(2)}
                                 </span>
                             </p>
-                            <button className="btn-comprar">Comprar</button>
+                            <button
+                                className="btn-comprar"
+                                onClick={comprar}
+                                disabled={comprando}
+                            >
+                                {comprando ? 'Procesando...' : 'Comprar'}
+                            </button>
                         </div>
                     </>
                 ) : (

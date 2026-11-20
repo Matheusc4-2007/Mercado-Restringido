@@ -7,6 +7,8 @@ import { AdminPanel } from './components/admin/AdminPanel';
 import { Catalog } from './components/Catalog';
 import { Account } from './components/Account';
 import { Carrito } from './components/Carrito';
+import { MisPedidos } from './components/MisPedidos';
+import { Favoritos } from './components/Favoritos';
 import { esAdmin } from './utils/admin';
 import { selectUsuario } from './app/authSlice';
 import { selectPage, selectBusqueda } from './app/uiSlice';
@@ -35,6 +37,10 @@ function App() {
                 return <Catalog key={busqueda} />;
             case 'carrito':
                 return <Carrito />;
+            case 'pedidos':
+                return usuario ? <MisPedidos /> : <p>Acceso restringido</p>;
+            case 'favoritos':
+                return usuario ? <Favoritos /> : <p>Acceso restringido</p>;
             case 'account':
                 return usuario?.es_vendedor ? (
                     <Account />
