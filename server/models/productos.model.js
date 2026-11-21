@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import connection from '../db.js'
+import { COLUMNAS_RESUMEN_RESENAS, JOIN_RESUMEN_RESENAS } from '../utils/resumenResenas.js'
 
 const errorDB = (mensaje, error) => {
     const err = new Error(`${mensaje}: ${error.message}`)
@@ -9,12 +10,12 @@ const errorDB = (mensaje, error) => {
 
 // Columnas que se devuelven siempre, una vez tienes la base es rapido
 const SELECT_PRODUCTO = `
-    SELECT p.id, p.nombre, p.descripcion, p.precio, p.imagen,
+    SELECT p.id, p.nombre, p.descripcion, p.precio, p.stock, p.imagen,
            p.id_vendedor, CONCAT(u.nombre, ' ', u.apellido) AS vendedor,
-           p.id_categoria, c.nombre AS categoria
+           p.id_categoria, c.nombre AS categoria,${COLUMNAS_RESUMEN_RESENAS}
     FROM productos p
     JOIN usuarios u ON u.id = p.id_vendedor
-    JOIN categorias c ON c.id = p.id_categoria
+    JOIN categorias c ON c.id = p.id_categoria${JOIN_RESUMEN_RESENAS}
 `
 
 class Productos {
@@ -75,6 +76,7 @@ class Productos {
                 nombre: productoData.nombre,
                 descripcion: productoData.descripcion,
                 precio: productoData.precio,
+                stock: productoData.stock,
                 id_vendedor: productoData.id_vendedor,
                 id_categoria: productoData.id_categoria,
                 imagen: productoData.imagen,
@@ -99,6 +101,8 @@ class Productos {
                 camposActualizados.descripcion = productoData.descripcion
             if (productoData.precio !== undefined)
                 camposActualizados.precio = productoData.precio
+            if (productoData.stock !== undefined)
+                camposActualizados.stock = productoData.stock
             if (productoData.imagen !== undefined)
                 camposActualizados.imagen = productoData.imagen
             if (productoData.id_categoria !== undefined)

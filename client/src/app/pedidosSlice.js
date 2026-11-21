@@ -7,7 +7,7 @@ import { conRechazo, errorDeAccion } from './utils'
 // panel admin (todos); cada vista la carga al montarse y la reinicia al salir.
 const initialState = {
   items: [],
-  filtro: { idComprador: '' }, // filtro aplicado a la lista actual
+  filtro: { idComprador: '', idVendedor: '' }, // filtro aplicado a la lista actual
   cargado: false,
   error: null,
   requestId: null,
@@ -15,9 +15,9 @@ const initialState = {
 
 export const cargarPedidos = createAsyncThunk(
   'pedidos/cargar',
-  conRechazo(async ({ idComprador = '' } = {}) => ({
-    items: await api.listarPedidos({ idComprador }),
-    filtro: { idComprador },
+  conRechazo(async ({ idComprador = '', idVendedor = '' } = {}) => ({
+    items: await api.listarPedidos({ idComprador, idVendedor }),
+    filtro: { idComprador, idVendedor },
   }))
 )
 
@@ -31,8 +31,8 @@ export const crearPedido = createAsyncThunk(
 // Al cambiar el estado se recarga la lista con el filtro vigente
 export const cambiarEstadoPedido = createAsyncThunk(
   'pedidos/cambiarEstado',
-  conRechazo(async ({ id, estado }, { getState }) => {
-    await api.cambiarEstadoPedido(id, estado)
+  conRechazo(async ({ id, estado, idVendedor }, { getState }) => {
+    await api.cambiarEstadoPedido(id, estado, idVendedor)
     return api.listarPedidos(getState().pedidos.filtro)
   })
 )

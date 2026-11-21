@@ -130,6 +130,9 @@ export function Catalog() {
                             price={p.precio.toFixed(2)}
                             seller={p.vendedor}
                             sellerId={p.id_vendedor}
+                            stock={p.stock}
+                            rating={p.promedio_calificacion}
+                            reviewCount={p.total_resenas}
                             img={p.imagen}
                             category={p.categoria}
                             description={p.descripcion}

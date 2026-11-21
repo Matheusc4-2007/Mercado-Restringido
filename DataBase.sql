@@ -57,6 +57,7 @@ CREATE TABLE `productos` (
   `nombre` varchar(100) NOT NULL,
   `descripcion` varchar(1000) NOT NULL DEFAULT '',
   `precio` decimal(10,2) NOT NULL CHECK (`precio` >= 0),
+  `stock` int(11) NOT NULL DEFAULT 0 CHECK (`stock` >= 0),
   `id_vendedor` char(36) NOT NULL,
   `id_categoria` char(36) NOT NULL,
   `imagen` varchar(500) NOT NULL
@@ -66,16 +67,16 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio`, `id_vendedor`, `id_categoria`, `imagen`) VALUES
-('09b0afd9-bec1-4bca-b376-690d7fa348ec', 'Zapatos de cuero negro', 'Zapatos formales de cuero genuino con suela antideslizante, ideales para oficina.', 69.90, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '12e45b40-147f-4d70-93f5-74393a38fac6', 'https://picsum.photos/seed/zapatos/400/400'),
-('11adb71a-ab6f-40b1-aed1-aa3fa02642fc', 'Juego de sábanas', 'Juego de sábanas de microfibra para cama queen, suaves y resistentes al lavado.', 45.00, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '6d2f00e7-e1ff-4f8e-b62e-910d38fb9e36', 'https://picsum.photos/seed/sabanas/400/400'),
-('4349e451-d100-47bd-8792-df49435fbbb7', 'Mochila multiusos', 'Mochila resistente al agua con compartimento acolchado para laptop de hasta 15 pulgadas.', 39.90, '11be480e-e969-46e2-a549-a70e34ec5067', '9b57d8e9-baa6-408f-a42f-ab1fd1a64bc2', 'https://picsum.photos/seed/mochila/400/400'),
-('4e742003-de78-4042-a7b1-1c763e47207f', 'Teléfono inteligente', 'Pantalla de 6.5 pulgadas, cámara de 48 MP y carga rápida. Incluye cargador.', 329.99, '11be480e-e969-46e2-a549-a70e34ec5067', 'b09efb6e-e6d6-4f97-b723-e908a7a537ec', 'https://picsum.photos/seed/telefono/400/400'),
-('688263a4-0e94-4028-b9ce-c7224ceafb51', 'Camisa de algodón', 'Camisa manga larga de algodón 100%, corte regular. Disponible en varios colores.', 24.99, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '12e45b40-147f-4d70-93f5-74393a38fac6', 'https://picsum.photos/seed/camisa/400/400'),
-('6def5519-bb30-4c1d-90c7-17e3483d15d9', 'Laptop 15 pulgadas', 'Laptop con procesador de última generación, 16 GB de RAM y 512 GB de almacenamiento SSD.', 749.00, '11be480e-e969-46e2-a549-a70e34ec5067', 'b09efb6e-e6d6-4f97-b723-e908a7a537ec', 'https://picsum.photos/seed/laptop/400/400'),
-('e0bf49dd-018e-430d-80ef-256fcb7c4eec', 'Crema hidratante facial', 'Crema hidratante con ácido hialurónico para todo tipo de piel, 50 ml.', 18.75, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '297ee7ac-bcca-4151-aa92-47691c2563ec', 'https://picsum.photos/seed/crema/400/400'),
-('e210e331-7fac-4328-9386-37bde18c5712', 'Lámpara de mesa', 'Lámpara LED de mesa con luz cálida regulable y base de madera.', 32.00, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '6d2f00e7-e1ff-4f8e-b62e-910d38fb9e36', 'https://picsum.photos/seed/lampara/400/400'),
-('f5d44492-9872-43e3-9f97-ca2b68dd9b63', 'Audífonos inalámbricos', 'Audífonos Bluetooth con cancelación de ruido y hasta 30 horas de batería.', 59.50, '11be480e-e969-46e2-a549-a70e34ec5067', 'b09efb6e-e6d6-4f97-b723-e908a7a537ec', 'https://picsum.photos/seed/audifonos/400/400');
+INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio`, `stock`, `id_vendedor`, `id_categoria`, `imagen`) VALUES
+('09b0afd9-bec1-4bca-b376-690d7fa348ec', 'Zapatos de cuero negro', 'Zapatos formales de cuero genuino con suela antideslizante, ideales para oficina.', 69.90, 15, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '12e45b40-147f-4d70-93f5-74393a38fac6', 'https://picsum.photos/seed/zapatos/400/400'),
+('11adb71a-ab6f-40b1-aed1-aa3fa02642fc', 'Juego de sábanas', 'Juego de sábanas de microfibra para cama queen, suaves y resistentes al lavado.', 45.00, 20, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '6d2f00e7-e1ff-4f8e-b62e-910d38fb9e36', 'https://picsum.photos/seed/sabanas/400/400'),
+('4349e451-d100-47bd-8792-df49435fbbb7', 'Mochila multiusos', 'Mochila resistente al agua con compartimento acolchado para laptop de hasta 15 pulgadas.', 39.90, 30, '11be480e-e969-46e2-a549-a70e34ec5067', '9b57d8e9-baa6-408f-a42f-ab1fd1a64bc2', 'https://picsum.photos/seed/mochila/400/400'),
+('4e742003-de78-4042-a7b1-1c763e47207f', 'Teléfono inteligente', 'Pantalla de 6.5 pulgadas, cámara de 48 MP y carga rápida. Incluye cargador.', 329.99, 12, '11be480e-e969-46e2-a549-a70e34ec5067', 'b09efb6e-e6d6-4f97-b723-e908a7a537ec', 'https://picsum.photos/seed/telefono/400/400'),
+('688263a4-0e94-4028-b9ce-c7224ceafb51', 'Camisa de algodón', 'Camisa manga larga de algodón 100%, corte regular. Disponible en varios colores.', 24.99, 49, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '12e45b40-147f-4d70-93f5-74393a38fac6', 'https://picsum.photos/seed/camisa/400/400'),
+('6def5519-bb30-4c1d-90c7-17e3483d15d9', 'Laptop 15 pulgadas', 'Laptop con procesador de última generación, 16 GB de RAM y 512 GB de almacenamiento SSD.', 749.00, 7, '11be480e-e969-46e2-a549-a70e34ec5067', 'b09efb6e-e6d6-4f97-b723-e908a7a537ec', 'https://picsum.photos/seed/laptop/400/400'),
+('e0bf49dd-018e-430d-80ef-256fcb7c4eec', 'Crema hidratante facial', 'Crema hidratante con ácido hialurónico para todo tipo de piel, 50 ml.', 18.75, 25, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '297ee7ac-bcca-4151-aa92-47691c2563ec', 'https://picsum.photos/seed/crema/400/400'),
+('e210e331-7fac-4328-9386-37bde18c5712', 'Lámpara de mesa', 'Lámpara LED de mesa con luz cálida regulable y base de madera.', 32.00, 18, '3feec41f-1b71-4c7f-ae41-1123e9ee6e4f', '6d2f00e7-e1ff-4f8e-b62e-910d38fb9e36', 'https://picsum.photos/seed/lampara/400/400'),
+('f5d44492-9872-43e3-9f97-ca2b68dd9b63', 'Audífonos inalámbricos', 'Audífonos Bluetooth con cancelación de ruido y hasta 30 horas de batería.', 59.50, 38, '11be480e-e969-46e2-a549-a70e34ec5067', 'b09efb6e-e6d6-4f97-b723-e908a7a537ec', 'https://picsum.photos/seed/audifonos/400/400');
 
 -- --------------------------------------------------------
 

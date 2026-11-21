@@ -56,6 +56,7 @@ export function Carrito() {
                                               {elem.nombreCompra}
                                           </h4>
                                           <p>Cantidad: {elem.cantidad}</p>
+                                          <p>Disponibles: {elem.stockCompra}</p>
                                       </span>
 
                                       <p className="vendedor-producto-carrito">

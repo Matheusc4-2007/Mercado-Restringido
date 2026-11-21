@@ -7,6 +7,7 @@ const datosIniciales = (p, userId) =>
         nombre: p.nombre,
         descripcion: p.descripcion ?? '',
         precio: String(p.precio),
+        stock: String(p.stock),
         imagen: p.imagen,
         id_categoria: p.id_categoria,
         id_vendedor: p.id_vendedor,
@@ -15,6 +16,7 @@ const datosIniciales = (p, userId) =>
         nombre: '',
         descripcion: '',
         precio: '',
+        stock: '',
         imagen: '',
         id_categoria: '',
         id_vendedor: userId || '',
@@ -44,6 +46,7 @@ export function FormProducto({
               nombre: d.nombre,
               descripcion: d.descripcion,
               precio: d.precio,
+              stock: d.stock,
               imagen: d.imagen,
               id_categoria: d.id_categoria,
             }
@@ -89,6 +92,18 @@ export function FormProducto({
         onChange={handleChange}
         required
         id="price"
+      />
+
+      <label htmlFor="stock">Stock (unidades disponibles)</label>
+      <input
+        type="number"
+        name="stock"
+        min="0"
+        step="1"
+        value={datos.stock}
+        onChange={handleChange}
+        required
+        id="stock"
       />
 
       <label htmlFor="img">URL de la imagen</label>

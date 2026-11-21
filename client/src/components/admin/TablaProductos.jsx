@@ -1,3 +1,5 @@
+import { textoValoracion } from '../../utils/valoracion'
+
 export function TablaProductos({ productos, onEditar, onEliminar }) {
   if (productos.length === 0) return <p>No hay productos</p>
 
@@ -9,6 +11,8 @@ export function TablaProductos({ productos, onEditar, onEliminar }) {
           <th>Nombre</th>
           <th>Categoría</th>
           <th>Precio</th>
+          <th>Stock</th>
+          <th>Valoración</th>
           <th>Vendedor</th>
           <th>Acciones</th>
         </tr>
@@ -20,6 +24,8 @@ export function TablaProductos({ productos, onEditar, onEliminar }) {
             <td title={p.descripcion || undefined}>{p.nombre}</td>
             <td>{p.categoria}</td>
             <td>{p.precio.toFixed(2)}</td>
+            <td>{p.stock === 0 ? 'Agotado' : p.stock}</td>
+            <td>{textoValoracion(p.promedio_calificacion, p.total_resenas)}</td>
             <td>{p.vendedor}</td>
             <td>
               <button type="button" onClick={() => onEditar(p.id)}>Editar</button>

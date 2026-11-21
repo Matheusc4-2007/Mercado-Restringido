@@ -17,8 +17,11 @@ const carritoSlice = createSlice({
     agregarItem: (state, action) => {
       const nuevo = action.payload
       const existe = state.items.find((item) => item.idCompra === nuevo.idCompra)
-      if (existe) existe.cantidad += 1
-      else state.items.push({ ...nuevo, cantidad: 1 })
+      if (existe) {
+        if (existe.cantidad < existe.stockCompra) existe.cantidad += 1
+      } else if (nuevo.stockCompra > 0) {
+        state.items.push({ ...nuevo, cantidad: 1 })
+      }
     },
     eliminarItem: (state, action) => {
       state.items = state.items.filter((item) => item.idCompra !== action.payload)
@@ -37,9 +40,14 @@ export default carritoSlice.reducer
 
 // Thunk: agrega al carrito y avisa solo si el producto es nuevo en él
 export const agregarAlCarrito = (item) => (dispatch, getState) => {
-  const yaEstaba = getState().carrito.items.some(
+  const existente = getState().carrito.items.find(
     (i) => i.idCompra === item.idCompra
   )
+  if (existente && existente.cantidad >= existente.stockCompra) {
+    dispatch(mostrarAviso(`No hay más unidades disponibles de ${item.nombreCompra}`))
+    return
+  }
+  const yaEstaba = Boolean(existente)
   dispatch(agregarItem(item))
   if (!yaEstaba) {
     dispatch(mostrarAviso(`${item.nombreCompra} se ha añadido a su carrito`))

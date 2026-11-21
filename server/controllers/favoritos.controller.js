@@ -2,6 +2,7 @@ import Favoritos from '../models/favoritos.model.js'
 import Productos from '../models/productos.model.js'
 import Usuarios from '../models/usuarios.model.js'
 import { validate as uuidValido } from 'uuid'
+import { aResumenRespuesta } from '../utils/resumenResenas.js'
 import ErrorApi from '../utils/ErrorApi.js'
 
 const validarId = (id) => {
@@ -11,7 +12,7 @@ const validarId = (id) => {
 
 // mysql devuelve decimal como texto ('10.50')
 const aRespuesta = (favorito) =>
-    favorito && { ...favorito, precio: Number(favorito.precio) }
+    favorito && { ...favorito, precio: Number(favorito.precio), ...aResumenRespuesta(favorito) }
 
 const noEncontrado = (id) =>
     new ErrorApi(404, 'Favorito no encontrado', `No existe un favorito con el id ${id}`)

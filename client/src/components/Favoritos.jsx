@@ -46,6 +46,9 @@ export function Favoritos() {
               price={f.precio.toFixed(2)}
               seller={f.vendedor}
               sellerId={f.id_vendedor}
+              stock={f.stock}
+              rating={f.promedio_calificacion}
+              reviewCount={f.total_resenas}
               img={f.imagen}
               category={f.categoria}
               description={f.descripcion}

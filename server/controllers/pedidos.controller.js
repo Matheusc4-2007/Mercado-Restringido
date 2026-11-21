@@ -37,6 +37,13 @@ const aRespuesta = (pedido) =>
 const noEncontrado = (id) =>
     new ErrorApi(404, 'Pedido no encontrado', `No existe un pedido con el id ${id}`)
 
+const stockInsuficiente = (nombre, disponible) =>
+    new ErrorApi(
+        409,
+        'Stock insuficiente',
+        `No hay suficientes unidades de "${nombre}" (disponibles: ${disponible})`
+    )
+
 const usuarioNoEncontrado = (id) =>
     new ErrorApi(404, 'Usuario no encontrado', `No existe un usuario con el id ${id}`)
 
@@ -92,7 +99,7 @@ const validarPedido = (body) => {
 }
 
 class PedidosController {
-    static async listar({ comprador } = {}) {
+    static async listar({ comprador, vendedor } = {}) {
         const filtros = {}
 
         if (comprador !== undefined) {
@@ -101,8 +108,25 @@ class PedidosController {
             filtros.idComprador = comprador
         }
 
+        if (vendedor !== undefined) {
+            validarId(vendedor)
+            if (!(await Usuarios.buscarId(vendedor))) throw usuarioNoEncontrado(vendedor)
+            filtros.idVendedor = vendedor
+        }
+
         const pedidos = await Pedidos.listar(filtros)
         return pedidos.map(aRespuesta)
+    }
+
+    static async compro({ comprador, producto } = {}) {
+        validarId(comprador)
+        validarId(producto)
+
+        if (!(await Usuarios.buscarId(comprador))) throw usuarioNoEncontrado(comprador)
+        if (!(await Productos.buscarId(producto)))
+            throw new ErrorApi(404, 'Producto no encontrado', `No existe un producto con el id ${producto}`)
+
+        return { compro: await Pedidos.compro(comprador, producto) }
     }
 
     static async buscarId(id) {
@@ -120,8 +144,8 @@ class PedidosController {
 
         // El precio y el total salen SIEMPRE de la base de datos, nunca del cliente.
         // Los cálculos se hacen en centavos para evitar errores de decimales.
-        let totalCentavos = 0
-        const items = []
+        // Un pedido por vendedor: cada uno gestiona el estado de lo suyo.
+        const porVendedor = new Map()
 
         for (const { id_producto, cantidad } of datos.items) {
             const producto = await Productos.buscarId(id_producto)
@@ -130,18 +154,28 @@ class PedidosController {
             if (producto.id_vendedor === datos.id_comprador)
                 throw new ErrorApi(403, 'Acción no permitida', `No puedes comprar tu propio producto "${producto.nombre}"`)
 
+            if (producto.stock < cantidad) throw stockInsuficiente(producto.nombre, producto.stock)
+
             const precioCentavos = Math.round(Number(producto.precio) * 100)
-            totalCentavos += precioCentavos * cantidad
-            items.push({ id_producto, cantidad, precio_unitario: precioCentavos / 100 })
+            const grupo = porVendedor.get(producto.id_vendedor) ?? { totalCentavos: 0, items: [] }
+            grupo.totalCentavos += precioCentavos * cantidad
+            grupo.items.push({ id_producto, cantidad, precio_unitario: precioCentavos / 100 })
+            porVendedor.set(producto.id_vendedor, grupo)
         }
 
-        return aRespuesta(
-            await Pedidos.crear({
+        try {
+            const creados = await Pedidos.crear({
                 id_comprador: datos.id_comprador,
-                total: totalCentavos / 100,
-                items,
+                pedidos: [...porVendedor.values()].map((g) => ({
+                    total: g.totalCentavos / 100,
+                    items: g.items,
+                })),
             })
-        )
+            return creados.map(aRespuesta)
+        } catch (e) {
+            if (e.code === 'STOCK_INSUFICIENTE') throw stockInsuficiente(e.producto, e.disponible)
+            throw e
+        }
     }
 
     static async actualizarEstado(id, body) {
@@ -155,6 +189,14 @@ class PedidosController {
         const existente = await Pedidos.buscarId(id)
         if (!existente) throw noEncontrado(id)
 
+        if (body.id_vendedor !== undefined) {
+            validarId(body.id_vendedor)
+            if (!existente.detalles.every((d) => d.id_vendedor === body.id_vendedor))
+                throw new ErrorApi(403, 'Acción no permitida', 'Este pedido no es tuyo')
+            if (body.estado === 'cancelado')
+                throw new ErrorApi(403, 'Acción no permitida', 'Los vendedores no pueden cancelar pedidos')
+        }
+
         if (!TRANSICIONES[existente.estado].includes(body.estado))
             throw new ErrorApi(
                 409,
@@ -162,7 +204,17 @@ class PedidosController {
                 `No se puede pasar un pedido de "${existente.estado}" a "${body.estado}"`
             )
 
-        return aRespuesta(await Pedidos.actualizarEstado(id, body.estado))
+        try {
+            return aRespuesta(await Pedidos.actualizarEstado(id, body.estado, existente.estado))
+        } catch (e) {
+            if (e.code === 'ESTADO_CAMBIADO')
+                throw new ErrorApi(
+                    409,
+                    'Cambio de estado no permitido',
+                    'El pedido cambió de estado mientras tanto, recarga la lista'
+                )
+            throw e
+        }
     }
 }
 

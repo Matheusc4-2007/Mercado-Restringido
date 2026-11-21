@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import * as api from '../services/resenas.service'
+import { consultarCompra } from '../services/pedidos.service'
 import { conRechazo, errorDeAccion } from './utils'
 
 // Reseñas de un producto (modal del producto) o todas (panel admin).
@@ -10,6 +11,8 @@ const initialState = {
   cargado: false,
   error: null,
   requestId: null,
+  compro: null,
+  compraRequestId: null,
 }
 
 export const cargarResenas = createAsyncThunk(
@@ -18,6 +21,11 @@ export const cargarResenas = createAsyncThunk(
     items: await api.listarResenas({ idProducto }),
     filtro: { idProducto },
   }))
+)
+
+export const verificarCompra = createAsyncThunk(
+  'resenas/verificarCompra',
+  conRechazo((datos) => consultarCompra(datos))
 )
 
 // Crear, actualizar y eliminar terminan recargando la lista con el filtro vigente
@@ -74,6 +82,20 @@ const resenasSlice = createSlice({
         state.cargado = true
       })
 
+    builder
+      .addCase(verificarCompra.pending, (state, action) => {
+        state.compraRequestId = action.meta.requestId
+        state.compro = null
+      })
+      .addCase(verificarCompra.fulfilled, (state, action) => {
+        if (state.compraRequestId !== action.meta.requestId) return // respuesta vieja
+        state.compro = action.payload.compro
+      })
+      .addCase(verificarCompra.rejected, (state, action) => {
+        if (state.compraRequestId !== action.meta.requestId) return
+        state.error = errorDeAccion(action)
+      })
+
     for (const thunk of [crearResena, actualizarResena, eliminarResena]) {
       builder
         .addCase(thunk.pending, (state) => {
@@ -95,6 +117,7 @@ export default resenasSlice.reducer
 export const selectResenas = (state) => state.resenas.items
 export const selectResenasCargando = (state) => !state.resenas.cargado
 export const selectResenasError = (state) => state.resenas.error
+export const selectCompro = (state) => state.resenas.compro
 
 // Promedio de calificación de la lista cargada (null si no hay reseñas)
 export const selectPromedioResenas = createSelector([selectResenas], (items) =>

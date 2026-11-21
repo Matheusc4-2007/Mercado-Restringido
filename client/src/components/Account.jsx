@@ -1,4 +1,5 @@
 import { DashBoard } from './DashBoard';
+import { MisVentas } from './MisVentas';
 import { TablaProductos } from './admin/TablaProductos';
 import { FormProducto } from './admin/FormProducto';
 import { MensajeError } from './admin/MensajeError';
@@ -85,6 +86,8 @@ export function Account() {
           onEliminar={eliminar}
         />
       )}
+
+      <MisVentas />
     </section>
   )
 }

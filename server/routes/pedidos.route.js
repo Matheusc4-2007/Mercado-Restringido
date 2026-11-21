@@ -14,10 +14,21 @@ const responderError = (res, e) => {
 
 // GET /api/pedido                  -> todos los pedidos
 // GET /api/pedido?comprador=<id>   -> pedidos de un comprador
+// GET /api/pedido?vendedor=<id>    -> pedidos que incluyen productos de un vendedor
 router.get('/', async (req, res) => {
     try {
-        const { comprador } = req.query
-        res.json(await control.listar({ comprador }))
+        const { comprador, vendedor } = req.query
+        res.json(await control.listar({ comprador, vendedor }))
+    } catch (e) {
+        responderError(res, e)
+    }
+})
+
+// GET /api/pedido/compra?comprador=<id>&producto=<id>  (va antes de /:id)
+router.get('/compra', async (req, res) => {
+    try {
+        const { comprador, producto } = req.query
+        res.json(await control.compro({ comprador, producto }))
     } catch (e) {
         responderError(res, e)
     }

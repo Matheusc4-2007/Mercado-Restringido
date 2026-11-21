@@ -2,6 +2,8 @@ export function DashBoard ({ model, products = [] }) {
   const total = products?.length || 0;
   const sum = products?.reduce((acc, prod) => acc + Number(prod.precio), 0) || 0;
   const average = total > 0 ? (sum / total).toFixed(2) : 0;
+  const inventario =
+    products?.reduce((acc, prod) => acc + Number(prod.precio) * prod.stock, 0) || 0;
 
   switch (model) {
     case 1:
@@ -14,7 +16,7 @@ export function DashBoard ({ model, products = [] }) {
     case 2:
       return (
         <div className="DashBoard-display">
-          <p className="Num-display">{sum}$</p>
+          <p className="Num-display">{inventario.toFixed(2)}$</p>
           <p>Valor total del inventario</p>
         </div>
       );

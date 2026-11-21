@@ -1,6 +1,7 @@
 import Resenas from '../models/resenas.model.js'
 import Productos from '../models/productos.model.js'
 import Usuarios from '../models/usuarios.model.js'
+import Pedidos from '../models/pedidos.model.js'
 import { validate as uuidValido } from 'uuid'
 import ErrorApi from '../utils/ErrorApi.js'
 
@@ -124,6 +125,9 @@ class ResenasController {
             throw new ErrorApi(403, 'Acción no permitida', 'No puedes reseñar tu propio producto')
 
         if (await Resenas.buscarProductoUsuario(datos.id_producto, datos.id_usuario)) throw yaReseno()
+
+        if (!(await Pedidos.compro(datos.id_usuario, datos.id_producto)))
+            throw new ErrorApi(403, 'Acción no permitida', 'Solo puedes reseñar productos que hayas comprado')
 
         try {
             return await Resenas.crear(datos)

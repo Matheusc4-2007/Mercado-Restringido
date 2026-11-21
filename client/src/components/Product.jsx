@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useCarrito } from '../hooks/useCarrito';
 import { BotonFavorito } from './BotonFavorito';
 import { Resenas } from './Resenas';
+import { textoValoracion } from '../utils/valoracion';
 
 export function Product({
     id,
@@ -11,6 +12,9 @@ export function Product({
     price = '00.00',
     seller = 'Default',
     sellerId,
+    stock,
+    rating = null,
+    reviewCount = 0,
     img = question,
     category,
     description,
@@ -20,6 +24,13 @@ export function Product({
     
     const [isExpanded, setIsExpanded] = useState(false);
 
+    // Crear, editar o borrar una reseña en el detalle actualiza la valoración de la tarjeta
+    const [valoracion, setValoracion] = useState(null);
+    const { promedio, total } = valoracion ?? { promedio: rating, total: reviewCount };
+
+    const agotado = stock === 0;
+    const puedeAgregar = estaLogueado && !agotado;
+
     const agregar = () => {
         agregarAlCarrito({
             idCompra: id,
@@ -27,6 +38,7 @@ export function Product({
             precioCompra: price,
             vendedorCompra: seller,
             imagenCompra: img,
+            stockCompra: stock,
         });
     };
 
@@ -51,18 +63,22 @@ export function Product({
                     {name}
                 </button>
                 {category && <p className="Category">{category}</p>}
+                <p className="Rating">{textoValoracion(promedio, total)}</p>
                 <p className="Price">{price}$</p>
                 <p className={description ? 'Description' : 'Description empty'}>
                     {description || 'Sin descripción'}
                 </p>
                 <p className="Seller">Vendedor: {seller}</p>
+                <p className={agotado ? 'Stock Stock-agotado' : 'Stock'}>
+                    {agotado ? 'Agotado' : `Disponibles: ${stock}`}
+                </p>
                 <BotonFavorito idProducto={id} />
                 <button
-                    className={estaLogueado ? 'Agg-cart' : 'Agg-cart-disabled'}
-                    disabled={!estaLogueado}
+                    className={puedeAgregar ? 'Agg-cart' : 'Agg-cart-disabled'}
+                    disabled={!puedeAgregar}
                     onClick={agregar}
                 >
-                    Agregar Al Carrito
+                    {agotado ? 'Agotado' : 'Agregar Al Carrito'}
                 </button>
             </div>
 
@@ -86,6 +102,7 @@ export function Product({
                             <div className="Modal-details">
                                 <h2>{name}</h2>
                                 {category && <span className="Modal-category">{category}</span>}
+                                <p className="Modal-rating">{textoValoracion(promedio, total)}</p>
                                 <p className="Modal-price">{price}$</p>
                                 
                                 <div className="Modal-description-box">
@@ -94,22 +111,29 @@ export function Product({
                                 </div>
                                 
                                 <p className="Modal-seller">Vendido por: <strong>{seller}</strong></p>
+                                <p className={agotado ? 'Stock Stock-agotado' : 'Stock'}>
+                                    {agotado ? 'Agotado' : `Disponibles: ${stock}`}
+                                </p>
 
                                 <button
-                                    className={estaLogueado ? 'Agg-cart Modal-btn' : 'Agg-cart-disabled Modal-btn'}
-                                    disabled={!estaLogueado}
+                                    className={puedeAgregar ? 'Agg-cart Modal-btn' : 'Agg-cart-disabled Modal-btn'}
+                                    disabled={!puedeAgregar}
                                     onClick={() => {
                                         agregar();
                                         setIsExpanded(false);
                                     }}
                                 >
-                                    Agregar Al Carrito
+                                    {agotado ? 'Agotado' : 'Agregar Al Carrito'}
                                 </button>
                                 <BotonFavorito idProducto={id} />
                             </div>
                         </div>
 
-                        <Resenas idProducto={id} idVendedor={sellerId} />
+                        <Resenas
+                            idProducto={id}
+                            idVendedor={sellerId}
+                            onResumen={setValoracion}
+                        />
                     </div>
                 </div>
             )}

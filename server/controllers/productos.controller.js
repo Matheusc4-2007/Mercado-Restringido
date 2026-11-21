@@ -3,8 +3,10 @@ import ErrorApi from '../utils/ErrorApi.js'
 import Usuarios from '../models/usuarios.model.js'
 import Categorias from '../models/categorias.model.js'
 import { validate as uuidValido } from 'uuid'
+import { aResumenRespuesta } from '../utils/resumenResenas.js'
 
 const PRECIO_MAXIMO = 99999999.99
+const STOCK_MAXIMO = 1000000
 const DESCRIPCION_MIN = 10
 const DESCRIPCION_MAX = 1000
 
@@ -43,6 +45,20 @@ const validadores = {
         return { valor: n }
     },
 
+    stock(v) {
+        if (typeof v !== 'number' && typeof v !== 'string')
+            return { error: 'El stock debe ser un número entero' }
+        if (typeof v === 'string' && v.trim() === '')
+            return { error: 'El stock debe ser un número entero' }
+
+        const n = Number(v)
+        if (!Number.isInteger(n)) return { error: 'El stock debe ser un número entero' }
+        if (n < 0) return { error: 'El stock no puede ser negativo' }
+        if (n > STOCK_MAXIMO) return { error: `El stock no puede superar ${STOCK_MAXIMO}` }
+
+        return { valor: n }
+    },
+
     imagen(v) {
         if (typeof v !== 'string') return { error: 'La imagen debe ser un enlace (URL)' }
         const limpio = v.trim()
@@ -72,8 +88,8 @@ const validadores = {
     },
 }
 
-const CAMPOS_CREAR = ['nombre', 'descripcion', 'precio', 'imagen', 'id_vendedor', 'id_categoria']
-const CAMPOS_ACTUALIZAR = ['nombre', 'descripcion', 'precio', 'imagen', 'id_categoria']
+const CAMPOS_CREAR = ['nombre', 'descripcion', 'precio', 'stock', 'imagen', 'id_vendedor', 'id_categoria']
+const CAMPOS_ACTUALIZAR = ['nombre', 'descripcion', 'precio', 'stock', 'imagen', 'id_categoria']
 
 const validarDatos = (body, { parcial }) => {
     if (!body || typeof body !== 'object' || Array.isArray(body))
@@ -108,7 +124,7 @@ const validarId = (id) => {
 
 // mysql devuelve decimal como texto ('10.50')
 const aRespuesta = (producto) =>
-    producto && { ...producto, precio: Number(producto.precio) }
+    producto && { ...producto, precio: Number(producto.precio), ...aResumenRespuesta(producto) }
 
 const noEncontrado = (id) =>
     new ErrorApi(404, 'Producto no encontrado', `No existe un producto con el id ${id}`)
