@@ -62,12 +62,8 @@ export function Product({
                 >
                     {name}
                 </button>
-                {category && <p className="Category">{category}</p>}
                 <p className="Rating">{textoValoracion(promedio, total)}</p>
                 <p className="Price">{price}$</p>
-                <p className={description ? 'Description' : 'Description empty'}>
-                    {description || 'Sin descripción'}
-                </p>
                 <p className="Seller">Vendedor: {seller}</p>
                 <p className={agotado ? 'Stock Stock-agotado' : 'Stock'}>
                     {agotado ? 'Agotado' : `Disponibles: ${stock}`}
