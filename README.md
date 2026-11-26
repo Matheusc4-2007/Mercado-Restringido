@@ -6,7 +6,13 @@
 > - Nelson Sandoval V-32.066.084
 > - Sergio Cuevas V-32.268.736
 
-Este proyecto utiliza React y TailwindCSS para su construcción. 
+Este proyecto utiliza React, React Router y TailwindCSS para su construcción. 
+
+## Rutas de la aplicación
+
+Navegación con [React Router](https://reactrouter.com) (`client/src/routes/AppRoutes.jsx`).
+
+![Mapa de rutas](/Diagrama-Rutas.drawio.png)
 
 ## Instalación y ejecución
 

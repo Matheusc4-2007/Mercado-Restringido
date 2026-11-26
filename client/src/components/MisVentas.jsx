@@ -11,7 +11,7 @@ import {
   selectPedidosError,
 } from '../app/pedidosSlice'
 import { TRANSICIONES_PEDIDO } from '../utils/pedidos'
-import { MensajeError } from './admin/MensajeError'
+import { MensajeError } from './common/MensajeError'
 import { DetallePedido } from './DetallePedido'
 import loading from '../assets/loading-icon.svg'
 

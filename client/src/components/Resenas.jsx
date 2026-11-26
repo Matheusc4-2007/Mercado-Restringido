@@ -17,7 +17,7 @@ import {
   selectResenasError,
   selectPromedioResenas,
 } from '../app/resenasSlice'
-import { MensajeError } from './admin/MensajeError'
+import { MensajeError } from './common/MensajeError'
 import { FormResena } from './FormResena'
 
 // Reseñas de un producto: promedio, lista y formulario.

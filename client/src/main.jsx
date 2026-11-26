@@ -5,11 +5,14 @@ import './index.css'
 import App from './App.jsx'
 import './categorias.css'
 import {store} from './app/store.js'
+import {BrowserRouter} from 'react-router-dom'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Provider store={store}>
-       <App />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+          <App />
+      </Provider>
+    </BrowserRouter>
   </StrictMode>,
 )
