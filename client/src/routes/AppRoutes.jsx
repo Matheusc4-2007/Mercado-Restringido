@@ -18,8 +18,9 @@ import { AdminResenasPage } from '../pages/admin/AdminResenasPage';
 
 // TEMPORAL: es la misma comprobación que antes hacía App.jsx con sus ternarios.
 // Se reemplazará por guardas de ruta cuando exista la autenticación con JWT.
+// Ya existe jeje
 function Restringido({ permitido, children }) {
-    return permitido ? children : <p>Acceso restringido</p>;
+    return permitido ? children : <Navigate to="/" replace />;
 }
 
 export function AppRoutes() {

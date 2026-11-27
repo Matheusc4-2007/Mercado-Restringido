@@ -6,10 +6,14 @@ export class ApiError extends Error {
   }
 }
 
-export async function peticion(url, opciones) {
+export async function peticion(url, opciones = {}) {
+  const token = localStorage.getItem('token')
+  const headers = { ...opciones.headers }
+  if (token) headers.Authorization = `Bearer ${token}`
+
   let res
   try {
-    res = await fetch(url, opciones)
+    res = await fetch(url, { ...opciones, headers })
   } catch {
     throw new ApiError('No se pudo conectar con el servidor')
   }
@@ -17,12 +21,12 @@ export async function peticion(url, opciones) {
   const data = await res.json().catch(() => null)
 
   if (!res.ok) {
-    // el backend responde { error, detalle } y detalle puede ser texto o lista
-    throw new ApiError(
-      data?.error ?? 'Error inesperado',
-      [].concat(data?.detalle ?? []),
-      res.status
-    )
+    if (res.status === 401 && token) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('usuario')
+      window.location.href = '/'
+    }
+    throw new ApiError(data?.error ?? 'Error inesperado', [].concat(data?.detalle ?? []), res.status)
   }
   return data
 }
