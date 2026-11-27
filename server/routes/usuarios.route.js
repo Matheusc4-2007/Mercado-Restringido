@@ -34,15 +34,7 @@ router.get('/', verificarToken, permitirRoles('admin'), async (req, res) => {
     }
 });
 
-router.get('/cedula/:cedula', async (req, res) => {
-    try {
-        res.json(await control.buscarCedula(req.params.cedula));
-    } catch (e) {
-        responderError(res, e);
-    }
-});
-
-router.get('/:id', async (req, res) => {
+router.get('/:id', verificarToken, async (req, res) => {
     try {
         res.json(await control.buscarId(req.params.id));
     } catch (e) {
@@ -71,7 +63,7 @@ router.delete(
     },
 );
 
-router.put('/:id', verificarToken, async (req, res) => {
+router.put('/:id', verificarToken, permitirRoles('admin'), async (req, res) => {
     try {
         res.json(await control.actualizar(req.params.id, req.body));
     } catch (e) {

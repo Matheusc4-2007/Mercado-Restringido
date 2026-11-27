@@ -33,8 +33,8 @@ cd Mercado-Restringido
 
 1. Inicia el módulo **MySQL** en XAMPP.
 2. Abre phpMyAdmin (`http://localhost/phpmyadmin`). Si tenías una versión anterior de la base, elimínala.
-3. Ve a **Importar** y carga `database/MercadoRestringido_completo.sql`. Esto crea la base `MercadoRestringido` con su estructura y datos de ejemplo.
-   - Si prefieres la estructura sin datos, usa `database/MercadoRestringido.sql`.
+3. Ve a **Importar** y carga `Database.sql`. Esto crea la base `MercadoRestringido` con su estructura y datos de ejemplo.
+   - Si prefieres la estructura sin datos, usa `Database.sql`.
    - Si ya tienes una base de la versión anterior y quieres conservar sus datos, ejecuta una sola vez `database/migracion_categorias.sql`.
 
 ### 3. Backend
@@ -52,6 +52,7 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=MercadoRestringido
+JWT_SECRET=atlas_es_un_gato_gordo
 ```
 
 > Estos valores son los de XAMPP por defecto (usuario `root` sin contraseña). Si tu MySQL tiene otra configuración, ajústalos.
