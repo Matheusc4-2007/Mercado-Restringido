@@ -1,5 +1,5 @@
 # Mercado Restringido, mini-proyecto basado en Mercado Libre
-###### E-Actividad 2.1 FrontEndII 2026C. *Universidad Valle del Momboy*
+###### E-Actividad 4.1 FrontEndII 2026C. *Universidad Valle del Momboy*
 
 > **Alumnos:**
 > - José Godoy V-32.006.867
